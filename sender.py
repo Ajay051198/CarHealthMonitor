@@ -55,3 +55,6 @@ class RabbitMq(object):
 #                             exchange='',
 #                             routing_key='Q')
 #     rabbit_mq.publish(payload={22})
+
+def hello():
+    print("Hello from sender")

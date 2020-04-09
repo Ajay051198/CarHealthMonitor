@@ -1,5 +1,11 @@
 from tkinter import *
 import math
+import os,sys,inspect
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(currentdir)
+sys.path.insert(0,parentdir) 
+import sender
+
 
 window = Tk()
 
@@ -19,9 +25,36 @@ window.minsize(math.ceil(width_value), math.ceil(height_value))
 
 window.configure(bg='black')
 
-temp = 0
+temp = 10
 press = 0
 emissions = 0
+
+
+#Initializing an object of sender
+rabbit_mq = sender.RabbitMq(queue='Hello',
+                            host='localhost',
+                            exchange='',
+                            routing_key='Hello')
+
+x = 0
+def timer():
+    global x
+    if x < 150:
+        message.set(temp)
+        window.after(1000, timer) # call this function again in 1,000 milliseconds
+        # sender.RabbitMq(str(Sensor1Val))
+        print("im here")
+        try:
+            rabbit_mq.publish(payload=temp)
+        except:
+            print("Fucked")
+        x += 1
+
+message = IntVar()
+message.set(temp)
+
+timer_display = Label(window, textvar= message,font=("Arial Bold", 15))
+timer_display.place(x= 100, y= 80, anchor = CENTER)
 
 lbl1 = Label(window, text="\n Input Sensor Data \n \n", bg="black", fg="white", font=("Times New Roman", 20))
 
@@ -113,4 +146,5 @@ window.grid_columnconfigure(3, weight=1)
 window.grid_rowconfigure(0, weight=4)
 window.grid_rowconfigure(5, weight=4)
 
+timer() 
 window.mainloop()
