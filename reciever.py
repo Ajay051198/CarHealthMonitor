@@ -16,6 +16,8 @@ class RabbitMqConfig(object):
         """
         self.host = host
         self.queue = queue
+        #to clear the contents of a file or create the file if it doesn't already exist
+        open('sensor1.txt', 'w').close()
 
 
 class RabbitMqServer(object):
@@ -40,26 +42,37 @@ class RabbitMqServer(object):
             Whenever we receive a message, this callback function is called by the Pika library. 
             In our case this function will print on the screen the contents of the message.
         """
+         
         message=body.decode("utf-8")
         print (f"Received {message}")
 
         #Read a file with existing data
         # a+ opens a file for appending and reading
         # it creates a file if it doesn't exist
-        with open('sensor1.txt', 'a+') as fin:
+        with open('sensor1.txt', 'r') as fin:
             data = fin.read().splitlines(True)
+            # print(f"data is {data}")
+            print(len(data))
             fin.close()
         
+        message=message[1:-1]
+        # to convert message of type 'str' to 'list'
+        listOfMessage = list(message.split(", "))
         #storing data in a file 
         #if-else condition used to limit the number of readings stored
         if len(data) > 100 :
-            data.append(message+"\n")
-            with open('sensor1.txt', 'w') as fout:
-                fout.writelines(data[1:])
+            
+            #iterating through the contents of a single packet sent from GUI
+            for val in listOfMessage:
+                data.append(val+"\n")
+                with open('sensor1.txt', 'w') as fout:
+                    fout.writelines(data[len(listOfMessage):])
         else:
             f = open("sensor1.txt", "a")
-            f.write(message+"\n")
+            for val in listOfMessage:
+                f.write(val+"\n")
             f.close()
+                
 
 
     def start_server(self):

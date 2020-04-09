@@ -37,15 +37,28 @@ rabbit_mq = sender.RabbitMq(queue='Hello',
                             routing_key='Hello')
 
 x = 0
+sensor1Data=[]
 def timer():
     global x
+
     if x < 150:
         message.set(temp)
         window.after(1000, timer) # call this function again in 1,000 milliseconds
         # sender.RabbitMq(str(Sensor1Val))
         print("im here")
+        
         try:
-            rabbit_mq.publish(payload=temp)
+            # rabbit_mq.publish(payload=temp)
+            sensor1Data.append(temp)
+            #store 10 reading in a list and then publish at once
+            if len(sensor1Data)==10:
+                rabbit_mq.publish(payload=sensor1Data)
+                sensor1Data.clear()
+                # print(f"Value f x is{x}")
+                # to set an infinite loop to continuesly send data
+                if x>100:
+                    x=0 
+
         except:
             print("Fucked")
         x += 1
