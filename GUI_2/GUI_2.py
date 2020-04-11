@@ -1,6 +1,56 @@
+import matplotlib
+
+matplotlib.use("TkAgg")
+from matplotlib.backends.backend_tkagg import (
+    FigureCanvasTkAgg, NavigationToolbar2Tk)
+from matplotlib.figure import Figure
+import matplotlib.animation as animation
+from matplotlib import style
+
 import tkinter as tk
 from tkinter import ttk
 import math
+
+style.use("ggplot")
+#
+f = Figure(figsize=(5, 5), dpi=100)
+a = f.add_subplot(111)
+
+# Creating an animate function for the matplotlib graphs
+def graph1_animate(i):
+    pullData1 = open("sampleData1.txt", "r").read()
+    dataList1 = pullData1.split('\n')
+    xList1 = []
+    yList1 = []
+
+    for line in dataList1:
+        if len(line) > 1:
+            x, y = line.split(',')
+            xList1.append(int(x))
+            yList1.append(int(y))
+
+    # In order to avoid overuse of memory
+    a.clear()
+    a.plot(xList1, yList1)
+
+# n = Figure(figsize=(5, 5), dpi=100)
+# m = n.add_subplot(111)
+
+#
+# def graph2_animate(i):
+#     pullData2 = open("sampleData2.txt", "r").read()
+#     dataList2 = pullData2.split('\n')
+#     xList2 = []
+#     yList2 = []
+#     for line in dataList2:
+#         if len(line) > 1:
+#             x, y = line.split(',')
+#             xList2.append(int(x))
+#             yList2.append(int(y))
+#
+#         # In order to avoid overuse of memory
+#     m.clear()
+#     m.plot(xList2, yList2)
 
 
 # BASE-LINE code for adding pages
@@ -72,12 +122,16 @@ class PageOne(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         label = tk.Label(self, text="Engine Oil Temperature", font=("Times New Roman", 12))
-        label.grid(row=0, column=0)
+        label.grid(row=0, column=1)
 
         button1 = ttk.Button(self, text="Home", command=lambda: controller.show_frame(StartPage))
         button1.grid(row=1, column=1)
         button2 = ttk.Button(self, text="Page 2", command=lambda: controller.show_frame(PageTwo))
         button2.grid(row=2, column=1)
+
+        canvas = FigureCanvasTkAgg(f, self)
+        canvas.draw()
+        canvas.get_tk_widget().grid(row=3, column=1)
 
 
 class PageTwo(tk.Frame):
@@ -85,7 +139,7 @@ class PageTwo(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         label = tk.Label(self, text="Tire Health", font=("Times New Roman", 12))
-        label.grid(row=0, column=0)
+        label.grid(row=0, column=1)
 
         button1 = ttk.Button(self, text="Home", command=lambda: controller.show_frame(StartPage))
         button1.grid(row=1, column=1)
@@ -93,7 +147,12 @@ class PageTwo(tk.Frame):
         button2 = ttk.Button(self, text="Page 1", command=lambda: controller.show_frame(PageOne))
         button2.grid(row=2, column=1)
 
+        # canvas = FigureCanvasTkAgg(n, self)
+        # canvas.draw()
+        # canvas.get_tk_widget().grid(row=3, column=1)
+
 
 app = HealthGraphs()
-
+graph1 = animation.FuncAnimation(f, graph1_animate, interval=1000)
+# graph2 = animation.FuncAnimation(n, graph2_animate, interval=1000)
 app.mainloop()
