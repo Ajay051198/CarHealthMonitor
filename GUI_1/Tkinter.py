@@ -38,6 +38,8 @@ rabbit_mq = sender.RabbitMq(queue='Hello',
 
 x = 0
 sensor1Data=[]
+sensor2Data=[]
+sensor3Data=[]
 def timer():
     global x
 
@@ -50,9 +52,13 @@ def timer():
         try:
             # rabbit_mq.publish(payload=temp)
             sensor1Data.append(temp)
+            sensor2Data.append(press)
+            sensor3Data.append(emissions)
             #store 10 reading in a list and then publish at once
             if len(sensor1Data)==10:
-                rabbit_mq.publish(payload=sensor1Data)
+                rabbit_mq.publish(payload=[sensor1Data,sensor2Data,sensor3Data])
+                sensor2Data.clear()
+                sensor3Data.clear()
                 sensor1Data.clear()
                 # print(f"Value f x is{x}")
                 # to set an infinite loop to continuesly send data
