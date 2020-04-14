@@ -1,32 +1,82 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+x_values = []
+y_values = []
 
-def graph(formula, x_range, x_label, y_label, graph_title):
+
+class dataManipulation():
     """
-    This function can be used to plot the graphs based on equation of the curve.
+        This class is used to read a text file, use the data to calculate
+        corresponding value of reliability and plot the graph
 
-Arguments:
-    formula {[str]} -- [equation to be plotted]
-    x_range {[list]} -- [range of values x axis (start, end, interval)]
-    x_label {[type]} -- [title of x axis]
-    y_label {[type]} -- [title of y axis]
-    graph_title {[type]} -- [title of graph]
     """
-    x = np.array(x_range)
-    # eval function evaluates the “String” like a python expression and returns the result as an integer
-    y = eval(formula)
-    plt.plot(x, y)  # used to plot the graphs
-    plt.title(graph_title)
-    plt.xlabel(x_label)
-    plt.ylabel(y_label)
-    plt.show()
+
+    def readX(self, filename):
+        """
+            This method is used to read the data from the text file and
+            store it in a form of list
+
+        Arguments:
+            filename {[string]} -- [.txt file from which the time data is read]
+
+        Returns:
+            [list] -- [Data from the file stored in a list]
+        """
+        with open(filename, 'r') as filehandle:
+            for line in filehandle:
+                line.rstrip("\n")
+                # remove linebreak which is the last character of the string np.exp(-(i/5190)**1.55)
+                currentData = line[:-1]
+
+                # add item to the list
+                x_values.append(float(currentData))
+        return x_values
+
+    def computeY(self, formula):
+        """
+            This method is used to calculate the value corresponding to x.
+            It will compute the equation based on the x value and the formula provided  
+
+        Arguments:
+            formula {[string]} -- [Equation used to compute y]
+
+        Returns:
+            [list] -- [The calculated y value is stored in a form of list]
+        """
+
+        for i in x_values:
+            y = eval(formula)
+            y_values.append(y)
+        return y_values
+
+    def graph(self, x_label, y_label, graph_title):
+        """
+        This function can be used to plot the graphs based on equation of the curve.
+
+    Arguments:
+        x_label {[type]} -- [title of x axis]
+        y_label {[type]} -- [title of y axis]
+        graph_title {[type]} -- [title of graph]
+        """
+        x = np.array(x_values)
+        # eval function evaluates the “String” like a python expression and returns the result as an integer
+        y = y_values
+        plt.plot(x, y)  # used to plot the graphs
+        plt.title(graph_title)
+        plt.xlabel(x_label)
+        plt.ylabel(y_label)
+        plt.show()
 
 
-# To plot engine-oil reliability curve
-graph('np.exp(-(x/5190)**1.55)', range(0, 15000, 1000),
-      'Hours', 'Reliability', 'Running hours vs Reliability')
+engineOilReliability = dataManipulation()
+engineOilReliability.readX("Sample.txt")
+engineOilReliability.computeY("np.exp(-(i/5190)**1.55)")
+engineOilReliability.graph('Hours', 'Reliability',
+                           'Running hours vs Reliability')
 
-# To plot engine-oil failure curve
-graph('1-np.exp(-(x/5190)**1.55)', range(0, 15000, 1000),
-      'Hours', 'Failure', 'Running hours vs Failure')
+
+#     # # To plot engine-oil failure curve
+# engineOilFailure = Plotting()
+# engineOilFailure.graph('1-np.exp(-(x/5190)**1.55)', range(0, 15000, 1000),
+#           'Hours', 'Failure', 'Running hours vs Failure')
