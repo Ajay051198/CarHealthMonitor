@@ -88,7 +88,11 @@ def graph1_animate(i):
 
         print (engineOilReliability.x_values)
         a.clear()
-        a.plot(engineOilReliability.x_values, engineOilReliability.y_values)
+        a.plot(engineOilReliability.x_values, engineOilReliability.y_values,label="legend")
+        a.legend(bbox_to_anchor=(0, 1.02, 1, .102), loc=3,
+            ncol=2, borderaxespad=0)
+        title = "BTC-e BTCUSD Prices\nLast Price: "
+        a.set_title(title)
 
     elif graph == "curve2":
         print("world")
@@ -102,7 +106,11 @@ def graph1_animate(i):
 
         print (engineOilReliability.x_values)
         a.clear()
-        a.plot(engineOilReliability.x_values, engineOilReliability.y_values)
+        a.plot(engineOilReliability.x_values, engineOilReliability.y_values,label="legend")
+        a.legend(bbox_to_anchor=(0, 1.02, 1, .102), loc=3,
+            ncol=2, borderaxespad=0)
+        title = "BTC-e BTCUSD Prices\nLast Price: "
+        a.set_title(title)
 
 
 # BASE-LINE code for adding pages
