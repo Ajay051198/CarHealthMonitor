@@ -84,11 +84,13 @@ class RabbitMqServer(object):
                 #storing data in a csv file
                 with open('SensorData.CSV','a+', newline='') as f:
                     theWriter=csv.writer(f)
-                    theWriter.writerow([listOfSensorData[0][i],listOfSensorData[1][i],listOfSensorData[2][i]])
+                    theWriter.writerow([listOfSensorData[0][i],listOfSensorData[1][i]])
             f.close()
-            print(f"time: {listOfSensorData[3][0]}")
-            file = open("TimeElaped.CSV","w")
-            file.write(listOfSensorData[3][0])
+            #store time since previous service in a file
+            print(f"time: {listOfSensorData[2][1]}")
+            file = open("TimeElapsed.CSV","w")
+            theWriter=csv.writer(file)
+            theWriter.writerow([listOfSensorData[2][0],listOfSensorData[2][1]])
             file.close()
 
                 
