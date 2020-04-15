@@ -1,6 +1,7 @@
 sensor1.txt
 SensorData.CSV
 .idea
+.vs
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
