@@ -1,9 +1,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-x_values = []
-y_values = []
 
+
+debug=False
 
 class dataManipulation():
     """
@@ -12,7 +12,12 @@ class dataManipulation():
 
     """
 
-    def readX(self, filename):
+    def __init__(self,fileName):
+        self.x_values = []
+        self.y_values = []
+        self.fileName = fileName
+
+    def computeX(self,time):
         """
             This method is used to read the data from the text file and
             store it in a form of list
@@ -23,15 +28,30 @@ class dataManipulation():
         Returns:
             [list] -- [Data from the file stored in a list]
         """
-        with open(filename, 'r') as filehandle:
-            for line in filehandle:
-                line.rstrip("\n")
-                # remove linebreak which is the last character of the string np.exp(-(i/5190)**1.55)
-                currentData = line[:-1]
+        
 
-                # add item to the list
-                x_values.append(float(currentData))
-        return x_values
+        # with open(self.fileName, 'r') as filehandle:
+        #     for line in filehandle:
+        #         line.rstrip("\n")
+        #         # remove linebreak which is the last character of the string np.exp(-(i/5190)**1.55)
+        #         currentData = line[:-1]
+
+        #         # add item to the list
+        #         self.x_values.append(float(currentData))
+                
+
+        timeinc=0
+
+        for i in range(40+1):
+            stepSize=time/40
+            
+            self.x_values.append(timeinc)
+            timeinc=timeinc+stepSize
+        print(self.x_values)
+
+                    
+
+        
 
     def computeY(self, formula):
         """
@@ -45,10 +65,9 @@ class dataManipulation():
             [list] -- [The calculated y value is stored in a form of list]
         """
 
-        for i in x_values:
+        for i in self.x_values:
             y = eval(formula)
-            y_values.append(y)
-        return y_values
+            self.y_values.append(y)
 
     def graph(self, x_label, y_label, graph_title):
         """
@@ -59,9 +78,9 @@ class dataManipulation():
         y_label {[type]} -- [title of y axis]
         graph_title {[type]} -- [title of graph]
         """
-        x = np.array(x_values)
+        x = np.array(self.x_values)
         # eval function evaluates the “String” like a python expression and returns the result as an integer
-        y = y_values
+        y = self.y_values
         plt.plot(x, y)  # used to plot the graphs
         plt.title(graph_title)
         plt.xlabel(x_label)
@@ -69,11 +88,12 @@ class dataManipulation():
         plt.show()
 
 
-engineOilReliability = dataManipulation()
-engineOilReliability.readX("Sample.txt")
-engineOilReliability.computeY("np.exp(-(i/5190)**1.55)")
-engineOilReliability.graph('Hours', 'Reliability',
-                           'Running hours vs Reliability')
+if debug==True:
+    engineOilReliability = dataManipulation(fileName="Sample.txt")
+    engineOilReliability.computeX(18000)
+    engineOilReliability.computeY("np.exp(-(i/5190)**1.55)")
+    engineOilReliability.graph('Hours', 'Reliability',
+                            'Running hours vs Reliability')
 
 
 #     # # To plot engine-oil failure curve
