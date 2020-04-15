@@ -28,6 +28,7 @@ window.configure(bg='black')
 temp = 10
 press = 0
 emissions = 0
+timeElapsed=20
 
 
 #Initializing an object of sender
@@ -56,7 +57,7 @@ def timer():
             sensor3Data.append(emissions)
             #store 10 reading in a list and then publish at once
             if len(sensor1Data)==10:
-                rabbit_mq.publish(payload=[sensor1Data,sensor2Data,sensor3Data])
+                rabbit_mq.publish(payload=[sensor1Data,sensor2Data,sensor3Data,timeElapsed])
                 sensor2Data.clear()
                 sensor3Data.clear()
                 sensor1Data.clear()

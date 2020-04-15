@@ -20,6 +20,7 @@ class RabbitMqConfig(object):
         #to clear the contents of a file or create the file if it doesn't already exist
         open('sensor1.txt', 'w').close()
         open('SensorData.CSV','w').close()
+        open('TimeElaped.CSV','w').close()
 
 
 
@@ -85,6 +86,11 @@ class RabbitMqServer(object):
                     theWriter=csv.writer(f)
                     theWriter.writerow([listOfSensorData[0][i],listOfSensorData[1][i],listOfSensorData[2][i]])
             f.close()
+            print(f"time: {listOfSensorData[3][0]}")
+            file = open("TimeElaped.CSV","w")
+            file.write(listOfSensorData[3][0])
+            file.close()
+
                 
 
 
