@@ -4,7 +4,6 @@ import os
 import math
 from tkinter import ttk
 import tkinter as tk
-import plotting_function
 from matplotlib import pyplot as plt
 from matplotlib import style
 import matplotlib.animation as animation
@@ -20,6 +19,7 @@ currentdir = os.path.dirname(os.path.abspath(
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0, parentdir)
 
+import plotting_function
 
 style.use("ggplot")
 
@@ -45,15 +45,16 @@ def changeParam(toWhat, pn):
 
 # User list comprehension to create a list of lists from Dataframe rows
 
-csvData = []
-with open("TimeElaped.csv") as w:
-    for row in w:
-        csvData.append((row.split(",")))
+
 
 
 def animate(i):
     if chartLoad:
         if paneCount == 1:
+            csvData = []
+            with open("../TimeElapsed.CSV") as w:
+                for row in w:
+                    csvData.append((row.split(",")))
             try:
 
                 if select_param == "OIL":
@@ -66,7 +67,7 @@ def animate(i):
                     # engineOilReliability.graph('Hours', 'Failure',
                     #                         'Running hours vs Failure')
 
-                    print(engineOilReliability.x_values)
+                    # print(engineOilReliability.x_values)
                     a.clear()
                     a.set_xlabel("time (hours)")
                     a.set_ylabel("Failure Probability")
@@ -76,10 +77,13 @@ def animate(i):
                              ncol=2, borderaxespad=0)
                     title = "OIL HEALTH "
                     a.set_title(title)
+                    print ("helo")
 
                 elif select_param == "TIRE":
                     a = plt.subplot2grid((6, 4), (0, 0), rowspan=5, colspan=4)
                     time = float(csvData[0][1])
+                    #conversion from months to years
+                    time=time/12
                     engineOilReliability = plotting_function.dataManipulation()
                     # sample txt would be replaced with a file
                     engineOilReliability.computeX(time)
@@ -87,7 +91,7 @@ def animate(i):
                     # engineOilReliability.graph('Hours', 'Failure',
                     #                         'Running hours vs Failure')
 
-                    print(engineOilReliability.x_values)
+                    # print(engineOilReliability.x_values)
                     a.clear()
                     a.set_xlabel("time (years)")
                     a.set_ylabel("Failure Probability")
@@ -97,6 +101,7 @@ def animate(i):
                              ncol=2, borderaxespad=0)
                     title = "TIRE HEALTH "
                     a.set_title(title)
+                    print("world")
 
             except Exception as e:
                 print(e)
@@ -200,3 +205,4 @@ class PageOne(tk.Frame):
 app = HealthGraphs()
 graph = animation.FuncAnimation(f, animate, interval=1000)
 app.mainloop()
+

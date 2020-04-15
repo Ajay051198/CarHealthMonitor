@@ -62,7 +62,8 @@ def timer():
 
             # store 10 reading in a list and then publish at once
             if len(sensor1Data) == 10:
-                rabbit_mq.publish(payload=[sensor1Data, sensor2Data, oil_time, tire_time])
+                #we convert oil_time from days to hours
+                rabbit_mq.publish(payload=[sensor1Data, sensor2Data, oil_time*24, tire_time])
                 sensor2Data.clear()
 
                 sensor1Data.clear()

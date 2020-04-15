@@ -12,10 +12,10 @@ class dataManipulation():
 
     """
 
-    def __init__(self,fileName):
+    def __init__(self):
         self.x_values = []
         self.y_values = []
-        self.fileName = fileName
+
 
     def computeX(self,time):
         """
@@ -47,7 +47,7 @@ class dataManipulation():
             
             self.x_values.append(timeinc)
             timeinc=timeinc+stepSize
-        print(self.x_values)
+        # print(self.x_values)
 
                     
 
@@ -89,7 +89,7 @@ class dataManipulation():
 
 
 if debug==True:
-    engineOilReliability = dataManipulation(fileName="Sample.txt")
+    engineOilReliability = dataManipulation()
     engineOilReliability.computeX(18000)
     engineOilReliability.computeY("np.exp(-(i/5190)**1.55)")
     engineOilReliability.graph('Hours', 'Reliability',

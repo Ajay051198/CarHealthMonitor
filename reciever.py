@@ -20,7 +20,7 @@ class RabbitMqConfig(object):
         #to clear the contents of a file or create the file if it doesn't already exist
         open('sensor1.txt', 'w').close()
         open('SensorData.CSV','w').close()
-        open('TimeElaped.CSV','w').close()
+        # open('TimeElapsed.CSV','w').close()
 
 
 
@@ -70,14 +70,18 @@ class RabbitMqServer(object):
         row_count = sum(1 for row in file)
 
         # this might come handy if we want to restrict the data values
-        if row_count > 500 : 
+        if row_count > 100 : 
             #iterating through the contents of a single packet sent from GUI
             for i in range(len(listOfSensorData[1])):
                 #storing data in a csv file
                 with open('SensorData.CSV','a+', newline='') as f:
                     theWriter=csv.writer(f)
-                    theWriter.writerow([listOfSensorData[0][i],listOfSensorData[1][i],listOfSensorData[2][i]])
-
+                    theWriter.writerow([listOfSensorData[0][i],listOfSensorData[1][i]])
+            # print(f"time: {listOfSensorData[2][1]}")
+            file = open("TimeElapsed.CSV","w")
+            theWriter=csv.writer(file)
+            theWriter.writerow([listOfSensorData[2][0],listOfSensorData[2][1]])
+            file.close()
                 
         else:
             for i in range(len(listOfSensorData[1])):
