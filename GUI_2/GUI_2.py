@@ -1,116 +1,93 @@
 import matplotlib
 
-import os,sys,inspect
-currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-parentdir = os.path.dirname(currentdir)
-sys.path.insert(0,parentdir) 
-
-import plotting_function
-
-
 matplotlib.use("TkAgg")
 from matplotlib.backends.backend_tkagg import (
     FigureCanvasTkAgg, NavigationToolbar2Tk)
-from matplotlib.figure import Figure
 import matplotlib.animation as animation
 from matplotlib import style
+from matplotlib import pyplot as plt
 
+import os, sys, inspect
+
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(currentdir)
+sys.path.insert(0, parentdir)
+
+import plotting_function
 import tkinter as tk
 from tkinter import ttk
 import math
 
 style.use("ggplot")
 
+# Creating an object for the figure to be plot
+f = plt.figure()
+
+select_param = "TIRE"
+programName = "tire"
+chartLoad = True
+paneCount = 1
+
+
+# Creating a method for menu parameters
+def changeParam(toWhat, pn):
+    global select_param
+    global programName
+
+    select_param = toWhat
+    programName = pn
+
 
 # Creating an animate function for the matplotlib graphs
-# def graph1_animate(i):
-    # pullData1 = open("sampleData1.txt", "r").read()
-    # dataList1 = pullData1.split('\n')
-    # xList1 = []
-    # yList1 = []
-
-    # for line in dataList1:
-    #     if len(line) > 1:
-    #         x, y = line.split(',')
-    #         xList1.append(int(x))
-    #         yList1.append(int(y))
-
-    # In order to avoid overuse of memory
-    # a.clear()
-    # a.plot(xList1, yList1)
 
 
-    # time=18000
-    # engineOilReliability = plotting_function.dataManipulation(fileName="Sample.txt")
-    # # sample txt would be replaced with a file
-    # engineOilReliability.computeX(time)
-    # engineOilReliability.computeY("np.exp(-(i/5190)**1.55)")
-    # # engineOilReliability.graph('Hours', 'Reliability',
-    # #                         'Running hours vs Reliability')
+def animate(i):
+    if chartLoad:
+        if paneCount == 1:
+            try:
 
-    # print (engineOilReliability.x_values)
+                if select_param == "OIL":
+                    a = plt.subplot2grid((6, 4), (0, 0), rowspan=5, colspan=4)
+                    time = 18000
+                    engineOilReliability = plotting_function.dataManipulation(fileName="Sample.txt")
+                    # sample txt would be replaced with a file
+                    engineOilReliability.computeX(time)
+                    engineOilReliability.computeY("np.exp(-(i/5190)**1.55)")
+                    # engineOilReliability.graph('Hours', 'Reliability',
+                    #                         'Running hours vs Reliability')
 
-    # a.clear()
-    # a.plot( engineOilReliability.x_values,  engineOilReliability.y_values)
+                    print(engineOilReliability.x_values)
+                    a.clear()
+                    a.set_xlabel("time")
+                    a.set_ylabel("Reliability Index")
+                    a.plot(engineOilReliability.x_values, engineOilReliability.y_values, label="legend")
+                    a.legend(bbox_to_anchor=(0, 1.02, 1, .102), loc=3,
+                             ncol=2, borderaxespad=0)
+                    title = "OIL HEALTH "
+                    a.set_title(title)
 
-graph = "curve"
+                elif select_param == "TIRE":
+                    a = plt.subplot2grid((6, 4), (0, 0), rowspan=5, colspan=4)
+                    time = 30000
+                    engineOilReliability = plotting_function.dataManipulation(fileName="Sample.txt")
+                    # sample txt would be replaced with a file
+                    engineOilReliability.computeX(time)
+                    engineOilReliability.computeY("np.exp(-(i/5190)**1.55)")
+                    # engineOilReliability.graph('Hours', 'Reliability',
+                    #                         'Running hours vs Reliability')
 
+                    print(engineOilReliability.x_values)
+                    a.clear()
+                    a.set_xlabel("time")
+                    a.set_ylabel("Reliability Index")
+                    a.plot(engineOilReliability.x_values, engineOilReliability.y_values, label="legend")
+                    a.legend(bbox_to_anchor=(0, 1.02, 1, .102), loc=3,
+                             ncol=2, borderaxespad=0)
+                    title = "TIRE HEALTH "
+                    a.set_title(title)
 
-f = Figure(figsize=(5, 5), dpi=100)
-a = f.add_subplot(111)
-
-
-def graph1_animate(i):
-    # pullData2 = open("sampleData2.txt", "r").read()
-    # dataList2 = pullData2.split('\n')
-    # xList2 = []
-    # yList2 = []
-    # for line in dataList2:
-    #     if len(line) > 1:
-    #         x, y = line.split(',')
-    #         xList2.append(int(x))
-    #         yList2.append(int(y))
-
-    #     # In order to avoid overuse of memory
-    # a2.clear()
-    # a2.plot(xList2, yList2)
-    if graph == "curve1":
-        print("hello")
-        xList2 = [1,2,3]
-        yList2 = [1,5,10]
-        time=18000
-        engineOilReliability = plotting_function.dataManipulation(fileName="Sample.txt")
-        # sample txt would be replaced with a file
-        engineOilReliability.computeX(time)
-        engineOilReliability.computeY("np.exp(-(i/5190)**1.55)")
-        # engineOilReliability.graph('Hours', 'Reliability',
-        #                         'Running hours vs Reliability')
-
-        print (engineOilReliability.x_values)
-        a.clear()
-        a.plot(engineOilReliability.x_values, engineOilReliability.y_values,label="legend")
-        a.legend(bbox_to_anchor=(0, 1.02, 1, .102), loc=3,
-            ncol=2, borderaxespad=0)
-        title = "BTC-e BTCUSD Prices\nLast Price: "
-        a.set_title(title)
-
-    elif graph == "curve2":
-        print("world")
-        time=30000
-        engineOilReliability = plotting_function.dataManipulation(fileName="Sample.txt")
-        # sample txt would be replaced with a file
-        engineOilReliability.computeX(time)
-        engineOilReliability.computeY("np.exp(-(i/5190)**1.55)")
-        # engineOilReliability.graph('Hours', 'Reliability',
-        #                         'Running hours vs Reliability')
-
-        print (engineOilReliability.x_values)
-        a.clear()
-        a.plot(engineOilReliability.x_values, engineOilReliability.y_values,label="legend")
-        a.legend(bbox_to_anchor=(0, 1.02, 1, .102), loc=3,
-            ncol=2, borderaxespad=0)
-        title = "BTC-e BTCUSD Prices\nLast Price: "
-        a.set_title(title)
+            except Exception as e:
+                print(e)
 
 
 # BASE-LINE code for adding pages
@@ -139,11 +116,23 @@ class HealthGraphs(tk.Tk):
         container.grid_rowconfigure(0, weight=1)  # 0 is the min size, weight is the priority
         container.grid_columnconfigure(0, weight=1)
 
+        # Adding a menu bar
+        menubar = tk.Menu(container)
+
+        paramChoice = tk.Menu(menubar, tearoff=1)
+        paramChoice.add_command(label="TIRE DATA",
+                                command=lambda: changeParam("TIRE", "tire"))
+        paramChoice.add_command(label="OIL DATA",
+                                command=lambda: changeParam("OIL", "oil"))
+        menubar.add_cascade(label="Select Data", menu=paramChoice)
+
+        tk.Tk.config(self, menu=menubar)
+
         # creating an empty dictionary for all the frames that we will create
         self.frames = {}
 
         # creating a for loop for every new page
-        for F in (StartPage, PageTwo):
+        for F in (StartPage, PageOne):
             # creating a start page for the GUI
             frame = F(container, self)
 
@@ -161,10 +150,6 @@ class HealthGraphs(tk.Tk):
         frame = self.frames[cont]
         frame.tkraise()  # brings up thw window to the top
 
-def selectGraph(graphName):
-    global graph
-    graph = graphName
-    print("im in select graph")
 
 # Adding a Start page
 class StartPage(tk.Frame):
@@ -172,59 +157,29 @@ class StartPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         label = tk.Label(self, text="HEALTH \nMONITOR", font=("Times New Roman", 12))
-        label.grid(row=0, column=0)
+        label.pack(padx=10, pady=10)
 
-        # button1 = ttk.Button(self, text="Page 1", command=lambda: [controller.show_frame(PageOne),selectGraph("curve1")])
-        # button1.grid(row=1, column=1)
-        button2 = ttk.Button(self, text="Page 2", command=lambda: [controller.show_frame(PageTwo),selectGraph("curve2")])
-        button2.grid(row=2, column=1)
+        button1 = ttk.Button(self, text="View Graphs",
+                             command=lambda: controller.show_frame(PageOne))
+        button1.pack(padx=10, pady=10)
 
 
 # Adding Page 1
-# class PageOne(tk.Frame):
-
-#     def __init__(self, parent, controller):
-#         tk.Frame.__init__(self, parent)
-#         label = tk.Label(self, text="Engine Oil Temperature", font=("Times New Roman", 12))
-#         label.grid(row=0, column=1)
-
-#         button1 = ttk.Button(self, text="Home", command=lambda: controller.show_frame(StartPage))
-#         button1.grid(row=1, column=1)
-#         button2 = ttk.Button(self, text="Page 2", command=lambda: [controller.show_frame(PageTwo),selectGraph("curve2")])
-#         button2.grid(row=2, column=1)
-
-#         # canvas1 = FigureCanvasTkAgg(f1, self)
-#         # canvas1.draw()
-#         # canvas1.get_tk_widget().grid(row=3, column=1)
-        
-     
-
-
-
-class PageTwo(tk.Frame):
+class PageOne(tk.Frame):
 
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
-        label = tk.Label(self, text="Tire Health", font=("Times New Roman", 12))
-        label.grid(row=0, column=1)
+        label = tk.Label(self, text="Reliability Graphs", font=("Times New Roman", 12))
+        label.pack(padx=10, pady=10)
 
         button1 = ttk.Button(self, text="Home", command=lambda: controller.show_frame(StartPage))
-        button1.grid(row=1, column=1)
-
-        button2 = ttk.Button(self, text="Graph 1", command=lambda:selectGraph("curve1"))
-        button2.grid(row=2, column=1)
-
-        button3 = ttk.Button(self, text="Graph 2", command=lambda: selectGraph("curve2"))
-        button3.grid(row=3, column=1)
+        button1.pack(padx=10, pady=10)
 
         canvas1 = FigureCanvasTkAgg(f, self)
         canvas1.draw()
-        canvas1.get_tk_widget().grid(row=4, column=1)
-
-  
+        canvas1.get_tk_widget().pack(padx=10, pady=10)
 
 
 app = HealthGraphs()
-graph1 = animation.FuncAnimation(f, graph1_animate, interval=1000)
-
+graph = animation.FuncAnimation(f, animate, interval=1000)
 app.mainloop()
