@@ -68,6 +68,10 @@ class RabbitMqServer(object):
             m = f"{data['oilTime_hrs']},{data['tireTime_years']}"
             f.write(m)
 
+        with open('UserEmail.CSV', 'w', newline='') as f:
+            m = f"{data['email']}"
+            f.write(m)
+
         with open('parameters.txt', 'w', newline='') as f:
             params = {"category1": data['category1'],
                       "category2": data['category2']}
