@@ -1,0 +1,12 @@
+I have updated most of the files with some major changes, I have listed the changes below:
+
+The whole system was redesigned to work with dictionary/json files to decrease the amount of code need to parse the data shared between files.
+Added categorical choices
+Added timer which outputs to a text file
+edited the code to match pep8 standards
+
+
+Updated Tkinter file to incorporate two categorical choices and send the data in form of a json instead of a list
+Updated receiver to parse the received json file into the respective data types.
+Updated how receiver file saves information to file
+Updated alertsys to update thresholds based on categorical values

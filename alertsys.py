@@ -1,7 +1,24 @@
 import pandas as pd
 import smtplib
+import json
 
 debug = False
+
+with open('parameters.txt', 'r') as f:
+    data = f.read()
+
+data = data.replace('\'', '\"')
+json_dict = json.loads(data)
+
+category1 = json_dict['category1']
+category2 = json_dict['category2']
+
+print(category1, category2)
+
+"""
+insert code here to choose thresholds based on category values
+"""
+
 
 def send_email(from_addr, to_addr_list, cc_addr_list,
                subject, message,
@@ -19,6 +36,7 @@ def send_email(from_addr, to_addr_list, cc_addr_list,
     problems = server.sendmail(from_addr, to_addr_list, message)
     server.quit()
     return problems
+
 
 def checkcond(f, thres1 = 10, thres2 = 10, thres3 = 10):
     data = pd.read_csv('SensorData.csv')
@@ -45,7 +63,7 @@ def checkcond(f, thres1 = 10, thres2 = 10, thres3 = 10):
         message = message + "component 3 requires maintainance \n"
         flag = True
 
-    if flag == True:
+    if flag:
 
         print(message)
         # the below section will be in the final code
@@ -59,14 +77,15 @@ def checkcond(f, thres1 = 10, thres2 = 10, thres3 = 10):
         '''
     return flag
 
-if debug == True:
+
+if debug:
     # example of the fucntion call which will be implemented in the update loop
     # the threshold can be a bollean value indicating faliure or a limit val
     # outside loop
     f = False
     # inside loop
     for i in range(10):
-        if f == False:
+        if not f:
             f = checkcond(f, 15,15,15)
 
     input("Press Enter to exit .")

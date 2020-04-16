@@ -1,4 +1,5 @@
 import csv
+import json
 try:
     import pika
 except Exception as e:
@@ -17,11 +18,10 @@ class RabbitMqConfig(object):
         """
         self.host = host
         self.queue = queue
-        #to clear the contents of a file or create the file if it doesn't already exist
+        # to clear the contents of a file or create the file if it doesn't already exist
         open('sensor1.txt', 'w').close()
         open('SensorData.CSV','w').close()
-        # open('TimeElapsed.CSV','w').close()
-
+        open('TimeElaped.CSV','w').close()
 
 
 class RabbitMqServer(object):
@@ -39,6 +39,7 @@ class RabbitMqServer(object):
         self._connection = pika.BlockingConnection(pika.ConnectionParameters(host=self.server.host))
         self._channel = self._connection.channel()
         self._tem = self._channel.queue_declare(queue=self.server.queue)
+    message = {}
 
     @staticmethod
     def callback(ch, method, properties, body):
@@ -47,58 +48,26 @@ class RabbitMqServer(object):
             In our case this function will print on the screen the contents of the message.
         """
          
-        message=body.decode("utf-8")
-        print (f"Received {message}")
+        message = body.decode("utf-8")
+        print(f"Received {message}")
+        # message = json.loads(str(message))
+        message = message.replace('\'', '\"')
+        data = json.loads(message)
 
-        #Read a file with existing data
-        # a+ opens a file for appending and reading
-        # it creates a file if it doesn't exist
-        # with open('sensor1.txt', 'r') as fin:
-        #     data = fin.read().splitlines(True)
-        #     fin.close()
-        
-        listOfSensorData=[]
-        # to convert message of type 'str' to 'list'
-        listOfSensorReadings=list(message.split("], "))
+        # iterating through the contents of a single packet sent from GUI and saving it in a file
+        for i in range(len(data['sensor1Data'])):
+            with open('SensorData.CSV', 'a+', newline='') as f:
+                m = "{},{},{}\n".format(data['sensor1Data'][i], data['sensor2Data'][i], data['sensor3Data'][i])
+                f.write(m)
 
-        for i in range(len(listOfSensorReadings)):
-            listOfSensorData.append(list(listOfSensorReadings[i].strip("[").strip("]").split(", ")))
-        
-        #storing data in a file 
-        #if-else condition used to limit the number of readings stored
-        file = open("SensorData.csv")
-        row_count = sum(1 for row in file)
+        print(f"time: {data['time']}")
+        with open('TimeElaped.CSV', 'a+', newline='') as f:
+            f.write(str(data['time'])+'\n')
 
-        # this might come handy if we want to restrict the data values
-        if row_count > 100 : 
-            #iterating through the contents of a single packet sent from GUI
-            for i in range(len(listOfSensorData[1])):
-                #storing data in a csv file
-                with open('SensorData.CSV','a+', newline='') as f:
-                    theWriter=csv.writer(f)
-                    theWriter.writerow([listOfSensorData[0][i],listOfSensorData[1][i]])
-            # print(f"time: {listOfSensorData[2][1]}")
-            file = open("TimeElapsed.CSV","w")
-            theWriter=csv.writer(file)
-            theWriter.writerow([listOfSensorData[2][0],listOfSensorData[2][1]])
-            file.close()
-                
-        else:
-            for i in range(len(listOfSensorData[1])):
-                #storing data in a csv file
-                with open('SensorData.CSV','a+', newline='') as f:
-                    theWriter=csv.writer(f)
-                    theWriter.writerow([listOfSensorData[0][i],listOfSensorData[1][i]])
-            f.close()
-            #store time since previous service in a file
-            print(f"time: {listOfSensorData[2][1]}")
-            file = open("TimeElapsed.CSV","w")
-            theWriter=csv.writer(file)
-            theWriter.writerow([listOfSensorData[2][0],listOfSensorData[2][1]])
-            file.close()
-
-                
-
+        with open('parameters.txt', 'w', newline='') as f:
+            params = {"category1": data['category1'],
+                      "category2": data['category2']}
+            f.write(str(params))
 
     def start_server(self):
         """
