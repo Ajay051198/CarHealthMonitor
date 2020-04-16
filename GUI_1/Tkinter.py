@@ -26,13 +26,28 @@ y = (window.winfo_screenheight() // 10) - (height_value // 10)
 window.geometry("%dx%d+%d+%d" % (width_value, height_value, x, y))
 
 window.minsize(math.ceil(width_value), math.ceil(height_value))
+window.maxsize(math.ceil(width_value), math.ceil(height_value))
 
 window.configure(bg='black')
 
 temp = 10
 press = 0
-emissions = 0
-timeElapsed = 20
+oil_time = 0
+tire_time = 0
+
+#setting up the font size and style
+fontstyle = "Helvetica"
+small_fsize = 13
+large_fsize = 15
+combostyle = ttk.Style()
+combostyle.theme_create('combostyle', parent='alt',
+                         settings = {'TCombobox':
+                                     {'configure':
+                                      {'selectbackground': 'magenta',
+                                       'fieldbackground': 'grey',
+                                       'background': 'aqua'
+                                       }}})
+combostyle.theme_use('combostyle') 
 
 # Initializing an object of sender
 rabbit_mq = sender.RabbitMq(queue='Hello',
@@ -43,53 +58,78 @@ rabbit_mq = sender.RabbitMq(queue='Hello',
 x = 0
 sensor1Data = []
 sensor2Data = []
-sensor3Data = []
 
 # Main title
-lbl_Title = Label(window, text="\n Input\n Sensor Data \n \n", bg="black", fg="white", font=("Times New Roman", 20))
+lbl_Title = Label(window, text="\n Sensor Data \n \n", bg="black", fg="white", font=(large_fsize, large_fsize))
 
-lbl_Temp = Label(window, text="Car Temperature", font=("Times New Roman", 15), bg="black", fg="white")
+lbl_Temp = Label(window, text="Engine Temperature (°C)", font=(fontstyle, small_fsize), bg="black", fg="white")
 lbl_blank1 = Label(window, text="  ", bg="black")
-lbl_Press = Label(window, text="Tire Pressure", font=("Times New Roman", 15), bg="black", fg="white")
+lbl_Press = Label(window, text="Tire Pressure (psi)", font=(fontstyle, small_fsize), bg="black", fg="white")
 lbl_blank2 = Label(window, text="  ", bg="black")
-lbl_emissions = Label(window, text="Emissions", font=("Times New Roman", 15), bg="black", fg="white")
-lbl_blank3 = Label(window, text="  \n ", bg="black")
-lbl_cat1 = Label(window, text="Category 1", font=("Times New Roman", 15), bg="black", fg="white")
+
+lbl_cat1 = Label(window, text="Category 1", font=(fontstyle, small_fsize), bg="black", fg="white")
+lbl_blank3 = Label(window, text="  ", bg="black")
+lbl_cat2 = Label(window, text="Category 2", font=(fontstyle, small_fsize), bg="black", fg="white")
 lbl_blank4 = Label(window, text="  ", bg="black")
-lbl_cat2 = Label(window, text="Category 2", font=("Times New Roman", 15), bg="black", fg="white")
-lbl_blank5 = Label(window, text="  ", bg="black")
-lbl_blank6 = Label(window, text="------", bg="black")
+
+lbl_heading = Label(window, text="\nTime elapsed after last replacement\n \n", bg="black", fg="white", font=(fontstyle, large_fsize))
+lbl_blank5 = Label(window, text="------", bg="black")
+
+lbl_oilTime = Label(window, text="For Oil (in days)", font=(fontstyle, small_fsize), bg="black", fg="white")
+lbl_blank3 = Label(window, text="           ", bg="black")
+lbl_tireTime = Label(window, text="For Tire (in months)", font=(fontstyle, small_fsize), bg="black", fg="white")
+lbl_blank6 = Label(window, text="  \n ", bg="black")
+lbl_blank7 = Label(window, text="  \n ", bg="black")
 
 # timer/value-indicators
-timer_display = Label(window, text=x, bg="black", fg="yellow", font=("Times New Roman", 20))
-count_Temp = Label(window, text=temp, bg="black", fg="white", font=("Times New Roman", 26))
-count_Press = Label(window, text=press, bg="black", fg="white", font=("Times New Roman", 26))
-count_emissions = Label(window, text=emissions, bg="black", fg="white", font=("Times New Roman", 26))
+timer_display = Label(window, text=x, bg="black", fg="yellow", font=(fontstyle, small_fsize))
+count_Temp = Label(window, text=temp, bg="black", fg="white", font=(fontstyle, small_fsize))
+count_Press = Label(window, text=press, bg="black", fg="white", font=(fontstyle, small_fsize))
+count_oil_time = Label(window, text=oil_time, bg="black", fg="white", font=(fontstyle, small_fsize))
+count_tire_time = Label(window, text=tire_time, bg="black", fg="white", font=(fontstyle, small_fsize))
+
 makes = ['A', 'B', 'C', 'D']
-make_select = ttk.Combobox(window, values=makes)
+make_select = ttk.Combobox(window, values=makes, width=0)
 models = ['100D', '200D', '300D', '400D']
-model_select = ttk.Combobox(window, values=models)
+model_select = ttk.Combobox(window, values=models, width=0)
 
 # grid layout
+lbl_Title.grid(row=0, column=1, sticky=N + S + E + W, columnspan=3)
+
 lbl_Temp.grid(row=4, column=0, sticky=N + S + E + W)
 lbl_blank1.grid(row=5, column=0, sticky=N + S + E + W)
+
 lbl_Press.grid(row=6, column=0, sticky=N + S + E + W)
 lbl_blank2.grid(row=7, column=0, sticky=N + S + E + W)
-lbl_emissions.grid(row=8, column=0, sticky=N + S + E + W)
-lbl_blank3.grid(row=9, column=0, sticky=N + S + E + W)
-lbl_cat1.grid(row=10, column=0, sticky=N + S + E + W)
-lbl_blank4.grid(row=11, column=0, sticky=N + S + E + W)
-lbl_cat2.grid(row=12, column=0, sticky=N + S + E + W)
-lbl_blank5.grid(row=13, column=0, sticky=N + S + E + W)
-lbl_blank6.grid(row=13, column=4, sticky=N + S + E + W)
 
-lbl_Title.grid(row=0, column=2, sticky=N + S + E + W)
+
+lbl_cat1.grid(row=8, column=0, sticky=N + S + E + W)
+lbl_blank3.grid(row=9, column=0, sticky=N + S + E + W)
+
+
+lbl_cat2.grid(row=10, column=0, sticky=N + S + E + W)
+lbl_blank4.grid(row=11, column=0, sticky=N + S + E + W)
+
+
+lbl_heading.grid(row=12, column=1, sticky=N + S + E + W, columnspan=3)
+lbl_blank5.grid(row=13, column=0, sticky=N + S + E + W)
+
+lbl_oilTime.grid(row=14, column=0, sticky=N + S + E + W)
+lbl_blank6.grid(row=15, column=4, sticky=N + S + E + W)
+
+lbl_tireTime.grid(row=16, column=0, sticky=N + S + E + W)
+lbl_blank7.grid(row=17, column=4, sticky=N + S + E + W)
+
+
 timer_display.grid(row=0, column=0, sticky=N + S + E + W)
 count_Temp.grid(row=4, column=2, sticky=N + S + E + W)
 count_Press.grid(row=6, column=2, sticky=N + S + E + W)
-count_emissions.grid(row=8, column=2, sticky=N + S + E + W)
-make_select.grid(row=10, column=2, sticky=N + S + E + W)
-model_select.grid(row=12, column=2, sticky=N + S + E + W)
+make_select.grid(row=8, column=2, sticky=N + S + E + W)
+model_select.grid(row=10, column=2, sticky=N + S + E + W)
+count_oil_time.grid(row=14, column=2, sticky=N + S + E + W)
+count_tire_time.grid(row=16, column=2, sticky=N + S + E + W)
+
+
 
 img_increase = PhotoImage(file='increase.png')
 img_decrease = PhotoImage(file='decrease.png')
@@ -97,38 +137,50 @@ img_decrease = PhotoImage(file='decrease.png')
 
 def increase_temp():
     global temp
-    temp = temp + 1
+    temp = temp + 10
     count_Temp.configure(text=temp)
 
 
 def decrease_temp():
     global temp
-    temp = temp - 1
-    count_Temp.configure(text=temp)
+    if temp > 0:
+        temp = temp - 10
+        count_Temp.configure(text=temp)
 
 
 def increase_press():
     global press
-    press = press + 1
-    count_Press.configure(text=press)
-
+    if press < 40:
+        press = press + 1
+        count_Press.configure(text=press)
 
 def decrease_press():
     global press
-    press = press - 1
-    count_Press.configure(text=press)
+    if press > 0:
+        press = press - 1
+        count_Press.configure(text=press)
 
+def increase_oilTime():
+    global oil_time
+    oil_time = oil_time + 1
+    count_oil_time.configure(text=oil_time)
 
-def increase_emm():
-    global emissions
-    emissions = emissions + 1
-    count_emissions.configure(text=emissions)
+def decrease_oilTime():
+    global oil_time
+    if oil_time > 0:
+        oil_time = oil_time - 1
+        count_oil_time.configure(text=oil_time)
 
+def increase_tireTime():
+    global tire_time
+    tire_time = tire_time + 3
+    count_tire_time.configure(text=tire_time)
 
-def decrease_emm():
-    global emissions
-    emissions = emissions - 1
-    count_emissions.configure(text=emissions)
+def decrease_tireTime():
+    global tire_time
+    if tire_time > 0:
+        tire_time = tire_time - 3
+        count_tire_time.configure(text=tire_time)
 
 
 btn_decTemp = Button(window, image=img_decrease, command=decrease_temp,
@@ -139,17 +191,23 @@ btn_incPress = Button(window, image=img_decrease, command=decrease_press,
                       bg="black", borderwidth=0, activebackground="black")
 btn_decPress = Button(window, image=img_increase, command=increase_press,
                       bg="black", borderwidth=0, activebackground="black")
-btn_decEmm = Button(window, image=img_decrease, command=decrease_emm,
-                    bg="black", borderwidth=0, activebackground="black")
-btn_incEmm = Button(window, image=img_increase, command=increase_emm,
-                    bg="black", borderwidth=0, activebackground="black")
+btn_decOilTime = Button(window, image=img_decrease, command=decrease_oilTime, bg="black", borderwidth=0,
+                        activebackground="black")
+btn_incOilTime = Button(window, image=img_increase, command=increase_oilTime, bg="black", borderwidth=0,
+                        activebackground="black")
+btn_decTireTime = Button(window, image=img_decrease, command=decrease_tireTime, bg="black", borderwidth=0,
+                         activebackground="black")
+btn_incTireTime = Button(window, image=img_increase, command=increase_tireTime, bg="black", borderwidth=0,
+                         activebackground="black")
 
 btn_decTemp.grid(row=4, column=1, sticky=N + S + E + W)
 btn_incTemp.grid(row=4, column=3, sticky=N + S + E + W)
 btn_incPress.grid(row=6, column=1, sticky=N + S + E + W)
 btn_decPress.grid(row=6, column=3, sticky=N + S + E + W)
-btn_decEmm.grid(row=8, column=1, sticky=N + S + E + W)
-btn_incEmm.grid(row=8, column=3, sticky=N + S + E + W)
+btn_decOilTime.grid(row=14, column=1, sticky=N + S + E + W)
+btn_incOilTime.grid(row=14, column=3, sticky=N + S + E + W)
+btn_decTireTime.grid(row=16, column=1, sticky=N + S + E + W)
+btn_incTireTime.grid(row=16, column=3, sticky=N + S + E + W)
 
 window.grid_columnconfigure(0, weight=1)
 window.grid_columnconfigure(1, weight=1)
@@ -172,19 +230,17 @@ def timer():
         # rabbit_mq.publish(payload=temp)
         sensor1Data.append(temp)
         sensor2Data.append(press)
-        sensor3Data.append(emissions)
+        
         category1 = model_select.get()
         category2 = make_select.get()
         # store 10 reading in a list and then publish at once
         if len(sensor1Data) == 10:
             rabbit_mq.publish(payload={"sensor1Data": sensor1Data,
                                        "sensor2Data": sensor2Data,
-                                       "sensor3Data": sensor3Data,
                                        "time": x,
                                        "category1": category1,
                                        "category2": category2})
             sensor2Data.clear()
-            sensor3Data.clear()
             sensor1Data.clear()
             # print(f"Value f x is{x}")
             # to set an infinite loop to continuously send data
