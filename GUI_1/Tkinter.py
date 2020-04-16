@@ -32,8 +32,8 @@ window.configure(bg='black')
 
 temp = 10
 press = 0
-oil_time = 0
-tire_time = 0
+oil_time_days = 0
+tire_time_months = 0
 
 #setting up the font size and style
 fontstyle = "Helvetica"
@@ -85,8 +85,8 @@ lbl_blank7 = Label(window, text="  \n ", bg="black")
 timer_display = Label(window, text=x, bg="black", fg="yellow", font=(fontstyle, small_fsize))
 count_Temp = Label(window, text=temp, bg="black", fg="white", font=(fontstyle, small_fsize))
 count_Press = Label(window, text=press, bg="black", fg="white", font=(fontstyle, small_fsize))
-count_oil_time = Label(window, text=oil_time, bg="black", fg="white", font=(fontstyle, small_fsize))
-count_tire_time = Label(window, text=tire_time, bg="black", fg="white", font=(fontstyle, small_fsize))
+count_oil_time = Label(window, text=oil_time_days, bg="black", fg="white", font=(fontstyle, small_fsize))
+count_tire_time = Label(window, text=tire_time_months, bg="black", fg="white", font=(fontstyle, small_fsize))
 
 makes = ['A', 'B', 'C', 'D']
 make_select = ttk.Combobox(window, values=makes, width=0)
@@ -161,26 +161,26 @@ def decrease_press():
         count_Press.configure(text=press)
 
 def increase_oilTime():
-    global oil_time
-    oil_time = oil_time + 1
-    count_oil_time.configure(text=oil_time)
+    global oil_time_days
+    oil_time_days = oil_time_days + 1
+    count_oil_time.configure(text=oil_time_days)
 
 def decrease_oilTime():
-    global oil_time
-    if oil_time > 0:
-        oil_time = oil_time - 1
-        count_oil_time.configure(text=oil_time)
+    global oil_time_days
+    if oil_time_days > 0:
+        oil_time_days = oil_time_days - 1
+        count_oil_time.configure(text=oil_time_days)
 
 def increase_tireTime():
-    global tire_time
-    tire_time = tire_time + 3
-    count_tire_time.configure(text=tire_time)
+    global tire_time_months
+    tire_time_months = tire_time_months + 3
+    count_tire_time.configure(text=tire_time_months)
 
 def decrease_tireTime():
-    global tire_time
-    if tire_time > 0:
-        tire_time = tire_time - 3
-        count_tire_time.configure(text=tire_time)
+    global tire_time_months
+    if tire_time_months > 0:
+        tire_time_months = tire_time_months - 3
+        count_tire_time.configure(text=tire_time_months)
 
 
 btn_decTemp = Button(window, image=img_decrease, command=decrease_temp,
@@ -222,7 +222,7 @@ def timer():
     global x
 
     if x < 10000:
-        window.after(1500, timer)  # call this function again in 1,000 milliseconds
+        window.after(1000, timer)  # call this function again in 1,000 milliseconds
         print("Updating ...")
         time_text = "Timer: {} weeks".format(x)
         timer_display.configure(text=time_text)
@@ -237,7 +237,8 @@ def timer():
         if len(sensor1Data) == 10:
             rabbit_mq.publish(payload={"sensor1Data": sensor1Data,
                                        "sensor2Data": sensor2Data,
-                                       "time": x,
+                                       "oilTime_hrs": oil_time_days*24,
+                                       "tireTime_years": tire_time_months/12,
                                        "category1": category1,
                                        "category2": category2})
             sensor2Data.clear()

@@ -11,8 +11,8 @@ class RabbitMqConfig(object):
     """
         This class configures the rabbit mq
     """
-    def __init__(self, host='localhost', queue='Hello'):
 
+    def __init__(self, host='localhost', queue='Hello'):
         """
             This method is used to initialaise the server name and queue from where the data is received
         """
@@ -20,8 +20,8 @@ class RabbitMqConfig(object):
         self.queue = queue
         # to clear the contents of a file or create the file if it doesn't already exist
         open('sensor1.txt', 'w').close()
-        open('SensorData.CSV','w').close()
-        open('TimeElaped.CSV','w').close()
+        open('SensorData.CSV', 'w').close()
+        open('TimeElapsed.CSV', 'w').close()
 
 
 class RabbitMqServer(object):
@@ -34,9 +34,11 @@ class RabbitMqServer(object):
           If we send a message to non-existing location, RabbitMQ will just drop
           the message.
     """
+
     def __init__(self, server):
         self.server = server
-        self._connection = pika.BlockingConnection(pika.ConnectionParameters(host=self.server.host))
+        self._connection = pika.BlockingConnection(
+            pika.ConnectionParameters(host=self.server.host))
         self._channel = self._connection.channel()
         self._tem = self._channel.queue_declare(queue=self.server.queue)
     message = {}
@@ -47,7 +49,7 @@ class RabbitMqServer(object):
             Whenever we receive a message, this callback function is called by the Pika library. 
             In our case this function will print on the screen the contents of the message.
         """
-         
+
         message = body.decode("utf-8")
         print(f"Received {message}")
         # message = json.loads(str(message))
@@ -57,12 +59,14 @@ class RabbitMqServer(object):
         # iterating through the contents of a single packet sent from GUI and saving it in a file
         for i in range(len(data['sensor1Data'])):
             with open('SensorData.CSV', 'a+', newline='') as f:
-                m = "{},{},{}\n".format(data['sensor1Data'][i], data['sensor2Data'][i], data['sensor3Data'][i])
+                m = "{},{}\n".format(
+                    data['sensor1Data'][i], data['sensor2Data'][i])
                 f.write(m)
 
-        print(f"time: {data['time']}")
-        with open('TimeElaped.CSV', 'a+', newline='') as f:
-            f.write(str(data['time'])+'\n')
+        print(f"time: {data['oilTime_hrs']}")
+        with open('TimeElapsed.CSV', 'w', newline='') as f:
+            m = f"{data['oilTime_hrs']},{data['tireTime_years']}"
+            f.write(m)
 
         with open('parameters.txt', 'w', newline='') as f:
             params = {"category1": data['category1'],
