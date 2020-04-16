@@ -35,6 +35,7 @@ temp = 10
 press = 0
 oil_time_days = 0
 tire_time_months = 0
+email=jainpranav1997@gmail.com
 
 #setting up the font size and style
 fontstyle = "Helvetica"
@@ -240,6 +241,7 @@ def timer():
                                        "sensor2Data": sensor2Data,
                                        "oilTime_hrs": oil_time_days*24,
                                        "tireTime_years": tire_time_months/12,
+                                       "email": email,
                                        "category1": category1,
                                        "category2": category2})
             sensor2Data.clear()
