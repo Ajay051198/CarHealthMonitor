@@ -4,7 +4,7 @@ import os
 import math
 from tkinter import ttk
 import tkinter as tk
-import plotting_function
+
 from matplotlib import pyplot as plt
 from matplotlib import style
 import matplotlib.animation as animation
@@ -19,7 +19,7 @@ currentdir = os.path.dirname(os.path.abspath(
     inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0, parentdir)
-
+import plotting_function
 
 style.use("ggplot")
 
@@ -45,15 +45,16 @@ def changeParam(toWhat, pn):
 
 # User list comprehension to create a list of lists from Dataframe rows
 
-# csvData = []
-# with open("TimeElaped.csv") as w:
-#     for row in w:
-#         csvData.append((row.split(",")))
+
 
 
 def animate(i):
     if chartLoad:
         if paneCount == 1:
+            csvData = []
+            with open("../TimeElapsed.csv") as w:
+                for row in w:
+                    csvData.append((row.split(",")))
             try:
 
                 if select_param == "OIL":
@@ -66,7 +67,7 @@ def animate(i):
                     # engineOilReliability.graph('Hours', 'Failure',
                     #                         'Running hours vs Failure')
 
-                    print(engineOilReliability.x_values)
+                    # print(engineOilReliability.x_values)
                     a.clear()
                     a.set_xlabel("time (hours)")
                     a.set_ylabel("Failure Probability")
