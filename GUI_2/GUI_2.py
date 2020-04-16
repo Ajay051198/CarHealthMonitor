@@ -21,24 +21,27 @@ parentdir = os.path.dirname(currentdir)
 sys.path.insert(0, parentdir)
 import plotting_function
 
-style.use("ggplot")
+style.use("dark_background")
+fontstyle = "Helvetica"
+small_fsize = 13
+large_fsize = 15
 
 # Creating an object for the figure to be plot
 f = plt.figure()
 
 select_param = "TIRE"
-programName = "tire"
+
 chartLoad = True
 paneCount = 1
 
 
 # Creating a method for menu parameters
-def changeParam(toWhat, pn):
+def changeParam(toWhat):
     global select_param
-    global programName
+    
 
     select_param = toWhat
-    programName = pn
+   
 
 
 # Creating an animate function for the matplotlib graphs
@@ -88,7 +91,7 @@ def animate(i):
                     # engineOilReliability.graph('Hours', 'Failure',
                     #                         'Running hours vs Failure')
 
-                    print(engineOilReliability.x_values)
+                    # print(engineOilReliability.x_values)
                     a.clear()
                     a.set_xlabel("time (years)")
                     a.set_ylabel("Failure Probability")
@@ -98,6 +101,8 @@ def animate(i):
                              ncol=2, borderaxespad=0)
                     title = "TIRE HEALTH "
                     a.set_title(title)
+    
+
 
             except Exception as e:
                 print(e)
@@ -129,15 +134,18 @@ class HealthGraphs(tk.Tk):
         # 0 is the min size, weight is the priority
         container.grid_rowconfigure(0, weight=1)
         container.grid_columnconfigure(0, weight=1)
+        container.config(bg="black")
+        
 
+        
         # Adding a menu bar
         menubar = tk.Menu(container)
 
         paramChoice = tk.Menu(menubar, tearoff=1)
         paramChoice.add_command(label="TIRE DATA",
-                                command=lambda: changeParam("TIRE", "tire"))
+                                command=lambda: changeParam("TIRE"))
         paramChoice.add_command(label="OIL DATA",
-                                command=lambda: changeParam("OIL", "oil"))
+                                command=lambda: changeParam("OIL"))
         menubar.add_cascade(label="Select Data", menu=paramChoice)
 
         tk.Tk.config(self, menu=menubar)
@@ -170,12 +178,12 @@ class HealthGraphs(tk.Tk):
 class StartPage(tk.Frame):
 
     def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
-        label = tk.Label(self, text="HEALTH \nMONITOR",
-                         font=("Times New Roman", 12))
+        tk.Frame.__init__(self, parent, bg ="black")
+        label = tk.Label(self, text=" CAR HEALTH \nMONITOR",bg="black",fg="white",
+                         font=(fontstyle, large_fsize))
         label.pack(padx=10, pady=10)
 
-        button1 = ttk.Button(self, text="View Graphs",
+        button1 = tk.Button(self,bg="black",fg="white",height=3, width=10, text="View Graphs",
                              command=lambda: controller.show_frame(PageOne))
         button1.pack(padx=10, pady=10)
 
@@ -184,13 +192,12 @@ class StartPage(tk.Frame):
 class PageOne(tk.Frame):
 
     def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
-        label = tk.Label(self, text="Failure Graphs",
-                         font=("Times New Roman", 12))
+        tk.Frame.__init__(self, parent, bg ="black")
+        label = tk.Label(self, text="Failure Graphs",bg="black",fg="white",
+                         font=(fontstyle, large_fsize))
         label.pack(padx=10, pady=10)
 
-        button1 = ttk.Button(
-            self, text="Home", command=lambda: controller.show_frame(StartPage))
+        button1 = tk.Button(self,bg="black",fg="white",height=3,width=10, text="Home", command=lambda: controller.show_frame(StartPage))
         button1.pack(padx=10, pady=10)
 
         canvas1 = FigureCanvasTkAgg(f, self)
