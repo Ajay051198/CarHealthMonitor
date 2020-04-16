@@ -17,17 +17,18 @@ window.iconbitmap(r'carsensors.ico')
 
 window.title("Car Health Monitor")
 
-width_value = (window.winfo_screenwidth() / 2)
-height_value = (window.winfo_screenheight() / 2)
+# width_value = (window.winfo_screenwidth() / 2)
+# height_value = (window.winfo_screenheight() / 2)
 
-x = (window.winfo_screenwidth() // 15) - (width_value // 15)
-y = (window.winfo_screenheight() // 10) - (height_value // 10)
+# x = (window.winfo_screenwidth() // 15) - (width_value // 15)
+# y = (window.winfo_screenheight() // 10) - (height_value // 10)
 
-window.geometry("%dx%d+%d+%d" % (width_value, height_value, x, y))
+# window.geometry("%dx%d+%d+%d" % (width_value, height_value, x, y))
 
-window.minsize(math.ceil(width_value), math.ceil(height_value))
-window.maxsize(math.ceil(width_value), math.ceil(height_value))
-
+# window.minsize(math.ceil(width_value), math.ceil(height_value))
+# window.maxsize(math.ceil(width_value), math.ceil(height_value))
+window.minsize(700, 500)
+window.maxsize(700, 500)
 window.configure(bg='black')
 
 temp = 10
@@ -72,7 +73,7 @@ lbl_blank3 = Label(window, text="  ", bg="black")
 lbl_cat2 = Label(window, text="Category 2", font=(fontstyle, small_fsize), bg="black", fg="white")
 lbl_blank4 = Label(window, text="  ", bg="black")
 
-lbl_heading = Label(window, text="\nTime elapsed after last replacement\n \n", bg="black", fg="white", font=(fontstyle, large_fsize))
+lbl_heading = Label(window, text="\nTime elapsed after last replacement\n ", bg="black", fg="white", font=(fontstyle, large_fsize))
 lbl_blank5 = Label(window, text="------", bg="black")
 
 lbl_oilTime = Label(window, text="For Oil (in days)", font=(fontstyle, small_fsize), bg="black", fg="white")
