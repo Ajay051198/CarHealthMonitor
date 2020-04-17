@@ -1,7 +1,7 @@
 import pandas as pd
 import smtplib
 
-debug = True
+debug = False
 
 
 def send_email(from_addr, to_addr_list, cc_addr_list,
@@ -43,15 +43,15 @@ def checkcond(f, thres1, thres2, thres3, thres4, email):
         message = message + "Engine Temperature is high, please carry out maintainance \n"
         flag = True
 
-    if data['DataStream2'].mean() > thres2:
-        message = message + "Tire pressure is abnormal, please carry out maintainance \n"
+    if data['DataStream2'].mean() < thres2:
+        message = message + "Tire pressure is low, please carry out maintainance \n"
         flag = True
     
-    if data2['DataStream3'] > thres3:
+    if data2['DataStream3'].mean() > thres3:
         message = message + "Engine oil need to be replaced, please carry out maintainance \n"
         flag = True
     
-    if data2['DataStream4'] > thres3:
+    if data2['DataStream4'].mean() > thres3:
         message = message + "Tire have worn out, please carry out maintainance \n"
         flag = True
 

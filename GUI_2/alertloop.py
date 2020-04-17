@@ -21,9 +21,9 @@ def select_thresh():
     email = json_dict['email']
 
     if category1 == "":
-        category1 = 'A'
+        category1 = 'Car'
     if category2 == "":
-        category2 = '100D'
+        category2 = 'Summer'
 
     print(category1)
     print(category2)
@@ -32,13 +32,31 @@ def select_thresh():
     """
     insert code here to choose thresholds based on category values
     """
+    if category1 == "Car":
 
-    thresh_engineTemp = 60
-    thresh_tirePressure = 10
+        if category2 == "Summer":
+            # Temperature in celsius
+            thresh_engineTemp = 106
+            # Pressure in psi
+            thresh_tirePressure = 30
+        elif category2 == "Winter":
+            thresh_engineTemp = 100
+            thresh_tirePressure = 33
+
+    elif category2 == "Truck":
+
+        if category2 == "Summer":
+            thresh_engineTemp = 115
+            thresh_tirePressure = 34
+
+        elif category2 == "Winter":
+            thresh_engineTemp = 110
+            thresh_tirePressure = 37
+
     thresh_tireDistanceKm = 110000
     thresh_oilTimehrs = 5000
 
-    return (thresh_engineTemp, thresh_tirePressure, thresh_oilTimehrs, thresh_tireDistanceKm ,email)
+    return (thresh_engineTemp, thresh_tirePressure, thresh_oilTimehrs, thresh_tireDistanceKm, email)
 
 
 # example of the function call which will be implemented in the update loop
