@@ -7,9 +7,7 @@ import matplotlib.animation as animation
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import matplotlib
 
-
 matplotlib.use("TkAgg")
-
 
 style.use("dark_background")
 fontstyle = "Helvetica"
@@ -124,7 +122,7 @@ class HealthGraphs(tk.Tk):
         self.frames = {}
 
         # creating a for loop for every new page
-        for F in (StartPage, PageOne):
+        for F in (StartPage, PageOne, PageTwo):
             # creating a start page for the GUI
             frame = F(container, self)
 
@@ -166,15 +164,15 @@ class StartPage(tk.Frame):
                           font=(fontstyle, large_fsize))
         label3.place(x=130, y=500)
 
-        button1 = tk.Button(self, bg="black", bd=5, fg="white", height=3, width=10, relief='ridge', text="Engine Oil",
+        button1 = tk.Button(self, bg="black", bd=5, fg="cyan2", height=3, width=10, relief='ridge', text="Engine Oil",
                             command=lambda: [controller.show_frame(PageOne), changeParam("OIL")])
         button1.place(x=470, y=300)
 
-        button2 = tk.Button(self, bg="black", relief='ridge', fg="white", bd=5, height=3, width=10, text="Tire",
+        button2 = tk.Button(self, bg="black", relief='ridge', fg="cyan2", bd=5, height=3, width=10, text="Tire",
                             command=lambda: [controller.show_frame(PageOne), changeParam("TIRE")])
         button2.place(x=300, y=300)
 
-        button3 = tk.Button(self, bg="black", fg="white", relief='ridge', height=3, width=15, bd=5,
+        button3 = tk.Button(self, bg="black", fg="cyan2", relief='ridge', height=3, width=15, bd=5,
                             text="Service complete",
                             command=lambda: controller.restart_notif())
         button3.place(x=560, y=485)
@@ -189,21 +187,42 @@ class PageOne(tk.Frame):
                          font=(fontstyle, 17))
         label.place(x=360, y=30)
 
-        button1 = tk.Button(self, bg="black", fg="white", height=3, width=10, text="Home",
+        button1 = tk.Button(self, bg="black", fg="cyan2", height=3, width=10, text="Home",
                             command=lambda: controller.show_frame(StartPage))
         button1.place(x=0, y=10)
 
-        button2 = tk.Button(self, bg="black", fg="white", height=2, width=10, text="Tire", font=(fontstyle, 11),
+        button2 = tk.Button(self, bg="black", fg="cyan2", height=2, width=10, text="Tire", font=(fontstyle, 11),
                             command=lambda: [controller.show_frame(PageOne), changeParam("TIRE")])
         button2.place(x=260, y=90)
 
-        button3 = tk.Button(self, bg="black", fg="white", height=2, width=10, text="Engine Oil", font=(fontstyle, 11),
+        button3 = tk.Button(self, bg="black", fg="cyan2", height=2, width=10, text="Engine Oil", font=(fontstyle, 11),
                             command=lambda: [controller.show_frame(PageOne), changeParam("OIL")])
         button3.place(x=530, y=90)
+
+        button4 = tk.Button(self, bg="black", fg="cyan2", height=3, width=10, text="Next",
+                            command=lambda: controller.show_frame(PageTwo))
+        button4.place(x=770, y=10)
 
         canvas1 = FigureCanvasTkAgg(f, self)
         canvas1.draw()
         canvas1.get_tk_widget().place(x=110, y=150)
+
+
+class PageTwo(tk.Frame):
+
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent, bg='black')
+        label = tk.Label(self, text="Project by:"
+                         , bg="black", fg="cyan2", font=(fontstyle, 14))
+        label.place(x=355, y=220)
+
+        labe2 = tk.Label(self, text="Ajaykumar Mudaliar\nSameer Todkar\nChinmay Mulay\nPranav Jain"
+                         , bg="black", fg="white", font=(fontstyle, 13))
+        labe2.place(x=325, y=260)
+
+        button1 = tk.Button(self, bg="black", fg="cyan2", height=3, width=10, text="Home",
+                            command=lambda: controller.show_frame(StartPage))
+        button1.place(x=0, y=10)
 
 
 app = HealthGraphs()
