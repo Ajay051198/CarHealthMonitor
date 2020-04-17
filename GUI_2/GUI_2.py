@@ -15,10 +15,10 @@ import matplotlib
 matplotlib.use("TkAgg")
 
 
-currentdir = os.path.dirname(os.path.abspath(
-    inspect.getfile(inspect.currentframe())))
-parentdir = os.path.dirname(currentdir)
-sys.path.insert(0, parentdir)
+# currentdir = os.path.dirname(os.path.abspath(
+#     inspect.getfile(inspect.currentframe())))
+# parentdir = os.path.dirname(currentdir)
+# sys.path.insert(0, parentdir)
 import plotting_function
 
 style.use("dark_background")
@@ -55,7 +55,7 @@ def animate(i):
     if chartLoad:
         if paneCount == 1:
             csvData = []
-            with open("../TimeElapsed.csv") as w:
+            with open("TimeElapsed.csv") as w:
                 for row in w:
                     csvData.append((row.split(",")))
             try:
