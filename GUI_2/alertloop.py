@@ -26,7 +26,7 @@ def select_thres():
     """
 
     thres1 = 60
-    thres2 = 30
+    thres2 = 10
 
     return (thres1, thres2, email)
 
@@ -45,5 +45,5 @@ while True:
         break
     time.sleep(5)
 
-input("Press Enter to exit .")
-exit()
+# input("Press Enter to exit .")
+# exit()

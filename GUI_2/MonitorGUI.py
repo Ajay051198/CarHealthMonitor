@@ -4,21 +4,17 @@ import os
 import math
 from tkinter import ttk
 import tkinter as tk
-
 from matplotlib import pyplot as plt
 from matplotlib import style
 import matplotlib.animation as animation
 from matplotlib.backends.backend_tkagg import (
     FigureCanvasTkAgg, NavigationToolbar2Tk)
 import matplotlib
+from tkinter import PhotoImage
+from PIL import Image, ImageTk
 
 matplotlib.use("TkAgg")
 
-
-# currentdir = os.path.dirname(os.path.abspath(
-#     inspect.getfile(inspect.currentframe())))
-# parentdir = os.path.dirname(currentdir)
-# sys.path.insert(0, parentdir)
 import plotting_function
 
 style.use("dark_background")
@@ -38,17 +34,12 @@ paneCount = 1
 # Creating a method for menu parameters
 def changeParam(toWhat):
     global select_param
-    
-
     select_param = toWhat
-   
 
 
 # Creating an animate function for the matplotlib graphs
 
 # User list comprehension to create a list of lists from Dataframe rows
-
-
 
 
 def animate(i):
@@ -101,7 +92,7 @@ def animate(i):
                              ncol=2, borderaxespad=0)
                     title = "TIRE HEALTH "
                     a.set_title(title)
-    
+
 
 
             except Exception as e:
@@ -116,7 +107,7 @@ class HealthGraphs(tk.Tk):
         tk.Tk.__init__(self, *args, **kwargs)
 
         # Adding an icon for the GUI
-        tk.Tk.iconbitmap(self, default="graph.ico")
+        tk.Tk.iconbitmap(self, r"graph.ico")
 
         # Adding the GUI title
         tk.Tk.wm_title(self, "Car Health Monitor")
@@ -135,9 +126,7 @@ class HealthGraphs(tk.Tk):
         container.grid_rowconfigure(0, weight=1)
         container.grid_columnconfigure(0, weight=1)
         container.config(bg="black")
-        
 
-        
         # Adding a menu bar
         menubar = tk.Menu(container)
 
@@ -173,31 +162,44 @@ class HealthGraphs(tk.Tk):
         frame = self.frames[cont]
         frame.tkraise()  # brings up thw window to the top
 
+    def restart_notif(self):
+        os.startfile("alertloop.py")
 
 # Adding a Start page
 class StartPage(tk.Frame):
 
     def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent, bg ="black")
-        label = tk.Label(self, text=" CAR HEALTH \nMONITOR",bg="black",fg="white",
+        tk.Frame.__init__(self, parent, bg="black")
+
+        # image2 = Image.open("pranav.png")
+        # photo_image = ImageTk.PhotoImage(image2)
+        # labelbg = tk.Label(self, image = photo_image)
+        # labelbg.place(relwidth=1, relheight=1)
+
+        label = tk.Label(self, text=" CAR HEALTH \nMONITOR", bg="black", fg="white",
                          font=(fontstyle, large_fsize))
         label.pack(padx=10, pady=10)
 
-        button1 = tk.Button(self,bg="black",fg="white",height=3, width=10, text="View Graphs",
-                             command=lambda: controller.show_frame(PageOne))
+        button1 = tk.Button(self, bg="black", fg="white", height=3, width=10, text="View Graphs",
+                            command=lambda: controller.show_frame(PageOne))
         button1.pack(padx=10, pady=10)
+
+        button2 = tk.Button(self, bg="black", fg="white", height=3, width=10, text="Service complete",
+                            command=lambda: controller.restart_notif())
+        button2.pack(padx=10, pady=10)
 
 
 # Adding Page 1
 class PageOne(tk.Frame):
 
     def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent, bg ="black")
-        label = tk.Label(self, text="Failure Graphs",bg="black",fg="white",
+        tk.Frame.__init__(self, parent, bg="black")
+        label = tk.Label(self, text="Failure Graphs", bg="black", fg="white",
                          font=(fontstyle, large_fsize))
         label.pack(padx=10, pady=10)
 
-        button1 = tk.Button(self,bg="black",fg="white",height=3,width=10, text="Home", command=lambda: controller.show_frame(StartPage))
+        button1 = tk.Button(self, bg="black", fg="white", height=3, width=10, text="Home",
+                            command=lambda: controller.show_frame(StartPage))
         button1.pack(padx=10, pady=10)
 
         canvas1 = FigureCanvasTkAgg(f, self)

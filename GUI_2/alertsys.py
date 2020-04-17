@@ -36,11 +36,11 @@ def checkcond(f, thres1, thres2, email):
 
     # checking the mean of the last 10 values to avoid triggers by noise
     if data['DataStream1'].mean() > thres1:
-        message = message + "component 1 requires maintainance \n"
+        message = message + "Engine Temperature is high, please carry out maintainance \n"
         flag = True
 
     if data['DataStream2'].mean() > thres2:
-        message = message + "component 2 requires maintainance \n"
+        message = message + "Tire pressure is abnormal, please carry out maintainance \n"
         flag = True
 
     if flag:
