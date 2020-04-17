@@ -1,21 +1,15 @@
-import inspect
-import sys
+import plotting_function
 import os
-import math
-from tkinter import ttk
 import tkinter as tk
 from matplotlib import pyplot as plt
 from matplotlib import style
 import matplotlib.animation as animation
-from matplotlib.backends.backend_tkagg import (
-    FigureCanvasTkAgg, NavigationToolbar2Tk)
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import matplotlib
-from tkinter import PhotoImage
-from PIL import Image, ImageTk
+
 
 matplotlib.use("TkAgg")
 
-import plotting_function
 
 style.use("dark_background")
 fontstyle = "Helvetica"
@@ -66,7 +60,7 @@ def animate(i):
                     a.set_xlabel("time (hours)")
                     a.set_ylabel("Failure Probability")
                     a.plot(engineOilReliability.x_values,
-                           engineOilReliability.y_values, label="legend")
+                           engineOilReliability.y_values, label="live data")
                     a.legend(bbox_to_anchor=(0, 1.02, 1, .102), loc=3,
                              ncol=2, borderaxespad=0)
                     title = "OIL HEALTH "
@@ -87,7 +81,7 @@ def animate(i):
                     a.set_xlabel("distance (kms)")
                     a.set_ylabel("Failure Probability")
                     a.plot(engineOilReliability.x_values,
-                           engineOilReliability.y_values, label="legend")
+                           engineOilReliability.y_values, label="live data")
                     a.legend(bbox_to_anchor=(0, 1.02, 1, .102), loc=3,
                              ncol=2, borderaxespad=0)
                     title = "TIRE HEALTH "
@@ -144,15 +138,13 @@ class HealthGraphs(tk.Tk):
         # showing up of a frame StartPage whenever this GUI opens
         self.show_frame(StartPage)
 
-
-
     def show_frame(self, cont):
         # cont is the key for the self.frames dictionary in the __init method
         frame = self.frames[cont]
         frame.tkraise()  # brings up thw window to the top
 
     def restart_notif(self):
-        os.startfile("alertloop.py")
+        os.startfile("alertloop.exe")
 
 
 # Adding a Start page
@@ -161,23 +153,24 @@ class StartPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent, bg='black')
 
-        label = tk.Label(self, text="CAR HEALTH MONITOR", bg="black", fg="white",
+        label = tk.Label(self, text="CAR HEALTH MONITOR",
+                         bg="black", fg="white",
                          font=(fontstyle, 30))
         label.place(x=190, y=80)
 
         label2 = tk.Label(self, text="Select the component", bg="black", fg="white",
                           font=(fontstyle, 18))
-        label2.place(x=300, y=240)
+        label2.place(x=310, y=240)
 
         label3 = tk.Label(self, text="When maintenance is carried out, click here", bg="black", fg="white",
                           font=(fontstyle, large_fsize))
         label3.place(x=130, y=500)
 
-        button1 = tk.Button(self, bg="black", bd=5, fg="white", height=3, width=10, relief='ridge', text="oils",
+        button1 = tk.Button(self, bg="black", bd=5, fg="white", height=3, width=10, relief='ridge', text="Engine Oil",
                             command=lambda: [controller.show_frame(PageOne), changeParam("OIL")])
         button1.place(x=470, y=300)
 
-        button2 = tk.Button(self, bg="black", relief='ridge', fg="white", bd=5, height=3, width=10, text="tire",
+        button2 = tk.Button(self, bg="black", relief='ridge', fg="white", bd=5, height=3, width=10, text="Tire",
                             command=lambda: [controller.show_frame(PageOne), changeParam("TIRE")])
         button2.place(x=300, y=300)
 
@@ -200,11 +193,11 @@ class PageOne(tk.Frame):
                             command=lambda: controller.show_frame(StartPage))
         button1.place(x=0, y=10)
 
-        button2 = tk.Button(self, bg="black", fg="white", height=3, width=10, text="tire",
+        button2 = tk.Button(self, bg="black", fg="white", height=2, width=10, text="Tire", font=(fontstyle, 11),
                             command=lambda: [controller.show_frame(PageOne), changeParam("TIRE")])
         button2.place(x=260, y=90)
 
-        button3 = tk.Button(self, bg="black", fg="white", height=3, width=10, text="oil",
+        button3 = tk.Button(self, bg="black", fg="white", height=2, width=10, text="Engine Oil", font=(fontstyle, 11),
                             command=lambda: [controller.show_frame(PageOne), changeParam("OIL")])
         button3.place(x=530, y=90)
 

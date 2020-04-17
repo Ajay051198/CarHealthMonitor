@@ -53,7 +53,7 @@ def select_thresh():
             thresh_engineTemp = 110
             thresh_tirePressure = 37
 
-    thresh_tireDistanceKm = 110000
+    thresh_tireDistanceKm = 60000
     thresh_oilTimehrs = 5000
 
     return (thresh_engineTemp, thresh_tirePressure, thresh_oilTimehrs, thresh_tireDistanceKm, email)
