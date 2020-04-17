@@ -1,6 +1,5 @@
 from alertsys import checkcond
 import time
-
 import json
 
 
@@ -12,26 +11,31 @@ def select_thresh():
         {(int,int,str)} -- (threshold 1, thereshold 2,user's email)
     """
 
+    # load data from the parameters.txt file
     with open('parameters.txt', 'r') as f:
         data = f.read()
     data = data.replace('\'', '\"')
     json_dict = json.loads(data)
+
+    # extract data from the json
     category1 = json_dict['category1']
     category2 = json_dict['category2']
     email = json_dict['email']
 
+    # set default values for category1 and category2, in case they have not been set
     if category1 == "":
         category1 = 'Car'
     if category2 == "":
         category2 = 'Summer'
 
+    '''
+    # for debuging
     print(category1)
     print(category2)
     print(email)
+    '''
 
-    """
-    insert code here to choose thresholds based on category values
-    """
+    # threshold selection criterion
     if category1 == "Car":
 
         if category2 == "Summer":
@@ -58,13 +62,10 @@ def select_thresh():
 
     return (thresh_engineTemp, thresh_tirePressure, thresh_oilTimehrs, thresh_tireDistanceKm, email)
 
-
-# example of the function call which will be implemented in the update loop
-# the threshold can be a boolean value indicating failure or a limit val
-# outside loop
+# intialize flag as false indicating no maintainance or replacement is required
 f = False
 
-# inside loop
+# an infite loop which will continue running until maintainance or replacement is required
 while True:
     print('waiting for update')
     if not f:
@@ -73,6 +74,3 @@ while True:
     else:
         break
     time.sleep(5)
-
-# input("Press Enter to exit .")
-# exit()
