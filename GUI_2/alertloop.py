@@ -3,7 +3,15 @@ import time
 
 import json
 
-def select_thres():
+
+def select_thresh():
+    """This is a function to set thresholds of parameters
+    These would be used by the notification system to compare
+    with the sensor values and send an email.
+    Returns:
+        {(int,int,str)} -- (threshold 1, thereshold 2,user's email)
+    """
+
     with open('parameters.txt', 'r') as f:
         data = f.read()
     data = data.replace('\'', '\"')
@@ -25,10 +33,13 @@ def select_thres():
     insert code here to choose thresholds based on category values
     """
 
-    thres1 = 60
-    thres2 = 10
+    thresh_engineTemp = 60
+    thresh_tirePressure = 10
+    thresh_tireDistanceKm = 110000
+    thresh_oilTimehrs = 5000
 
-    return (thres1, thres2, email)
+    return (thresh_engineTemp, thresh_tirePressure, thresh_oilTimehrs, thresh_tireDistanceKm ,email)
+
 
 # example of the function call which will be implemented in the update loop
 # the threshold can be a boolean value indicating failure or a limit val
@@ -39,8 +50,8 @@ f = False
 while True:
     print('waiting for update')
     if not f:
-        (t1, t2, email) = select_thres()
-        f = checkcond(f, t1, t2, email)
+        (t1, t2, t3, t4, email) = select_thresh()
+        f = checkcond(f, t1, t2, t3, t4, email)
     else:
         break
     time.sleep(5)

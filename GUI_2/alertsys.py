@@ -1,7 +1,7 @@
 import pandas as pd
 import smtplib
 
-debug = False
+debug = True
 
 
 def send_email(from_addr, to_addr_list, cc_addr_list,
@@ -22,10 +22,14 @@ def send_email(from_addr, to_addr_list, cc_addr_list,
     return problems
 
 
-def checkcond(f, thres1, thres2, email):
+def checkcond(f, thres1, thres2, thres3, thres4, email):
     data = pd.read_csv('SensorData.csv')
     data.columns = ['DataStream1', 'DataStream2']
     data = data.tail(10)
+
+    data2 = pd.read_csv('TimeElapsed.CSV', names= ['DataStream3', 'DataStream4'])  
+   
+    
 
     # using flag based calling to ensure the alert is given only once unless it is reset
     flag = f
@@ -41,6 +45,14 @@ def checkcond(f, thres1, thres2, email):
 
     if data['DataStream2'].mean() > thres2:
         message = message + "Tire pressure is abnormal, please carry out maintainance \n"
+        flag = True
+    
+    if data2['DataStream3'] > thres3:
+        message = message + "Engine oil need to be replaced, please carry out maintainance \n"
+        flag = True
+    
+    if data2['DataStream4'] > thres3:
+        message = message + "Tire have worn out, please carry out maintainance \n"
         flag = True
 
     if flag:
@@ -66,7 +78,7 @@ if debug:
     # inside loop
     for i in range(10):
         if not f:
-            f = checkcond(f, 60,15)
+            f = checkcond(f, 60,15,20,12,"abc")
 
     input("Press Enter to exit .")
     exit()

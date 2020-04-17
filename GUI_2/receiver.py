@@ -75,7 +75,7 @@ class RabbitMqServer(object):
 
         print(f"time: {data['oilTime_hrs']}")
         with open('TimeElapsed.CSV', 'w', newline='') as f:
-            m = f"{data['oilTime_hrs']},{data['tireTime_years']}"
+            m = f"{data['oilTime_hrs']},{data['tire_dist_kms']}"
             f.write(m)
 
         with open('parameters.txt', 'w', newline='') as f:

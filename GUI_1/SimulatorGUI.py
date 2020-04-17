@@ -17,10 +17,10 @@ window.minsize(800, 600)
 window.maxsize(800, 600)
 window.configure(bg='black')
 
-temp = 10
-press = 0
+temp = 200
+press = 30
 oil_time_days = 0
-tire_time_months = 0
+tire_dist_kms = 0
 mailID = StringVar()
 email = "rain.cloud.bot@gmail.com"
 
@@ -34,6 +34,7 @@ combostyle.theme_create('combostyle', parent='alt',
                         settings={'TCombobox':
                                   {'configure':
                                    {'selectbackground': 'black',
+                                    'foreground':'white',
                                     'fieldbackground': 'black',
                                     'background': 'dark grey',
                                     'arrowcolor': 'black',
@@ -62,11 +63,11 @@ lbl_Press = Label(window, text="Tire Pressure (psi)", font=(
     fontstyle, small_fsize), bg="black", fg="white")
 lbl_blank2 = Label(window, text="  ", bg="black")
 
-lbl_cat1 = Label(window, text="Car Make", font=(
+lbl_cat1 = Label(window, text="Vehicle Type", font=(
     fontstyle, small_fsize), bg="black", fg="white")
 lbl_blank3 = Label(window, text="  ", bg="black")
 
-lbl_cat2 = Label(window, text="Ambient Driving Condition",
+lbl_cat2 = Label(window, text="Driving Weather Condition",
                  font=(fontstyle, small_fsize), bg="black", fg="white")
 lbl_blank4 = Label(window, text="  ", bg="black")
 
@@ -78,7 +79,7 @@ lbl_oilTime = Label(window, text="For Oil (in days)", font=(
     fontstyle, small_fsize), bg="black", fg="white")
 lbl_blank3 = Label(window, text="           ", bg="black")
 
-lbl_tireTime = Label(window, text="For Tire (in months)", font=(
+lbl_tireDist = Label(window, text="For Tire (in kms)", font=(
     fontstyle, small_fsize), bg="black", fg="white")
 lbl_blank6 = Label(window, text="  \n ", bg="black")
 lbl_blank7 = Label(window, text="  \n ", bg="black")
@@ -97,14 +98,14 @@ count_Press = Label(window, text=press, bg="black",
                     fg="white", font=(fontstyle, small_fsize))
 count_oil_time = Label(window, text=oil_time_days,
                        bg="black", fg="white", font=(fontstyle, small_fsize))
-count_tire_time = Label(window, text=tire_time_months,
+count_tire_dist = Label(window, text=tire_dist_kms,
                         bg="black", fg="white", font=(fontstyle, small_fsize))
 
 
-makes = ['A', 'B', 'C', 'D']
+makes = ['Car', 'Truck']
 make_select = ttk.Combobox(window, values=makes, width=0)
-models = ['100D', '200D', '300D', '400D']
-model_select = ttk.Combobox(window, values=models, width=0)
+weather_condition = ['Summer', 'Winter']
+weather_select = ttk.Combobox(window, values=weather_condition, width=0)
 
 # Placing Labels using grid function
 # Text Labels
@@ -127,20 +128,20 @@ lbl_blank5.grid(row=13, column=0, sticky=N + S + E + W)
 lbl_oilTime.grid(row=14, column=0, sticky=N + S + E + W)
 lbl_blank6.grid(row=15, column=4, sticky=N + S + E + W)
 
-lbl_tireTime.grid(row=16, column=0, sticky=N + S + E + W)
+lbl_tireDist.grid(row=16, column=0, sticky=N + S + E + W)
 lbl_blank7.grid(row=17, column=4, sticky=N + S + E + W)
 
 email_input.grid(row=18, column=2, sticky=N + S + E + W)
 lbl_email.grid(row=18, column=0, sticky=N + S + E + W, columnspan=1)
 lbl_blank8.grid(row=19, column=4, sticky=N + S + E + W)
 
-#Number Labels
+# Number Labels
 count_Temp.grid(row=4, column=2, sticky=N + S + E + W)
 count_Press.grid(row=6, column=2, sticky=N + S + E + W)
 make_select.grid(row=8, column=2, sticky=N + S + E + W)
-model_select.grid(row=10, column=2, sticky=N + S + E + W)
+weather_select.grid(row=10, column=2, sticky=N + S + E + W)
 count_oil_time.grid(row=14, column=2, sticky=N + S + E + W)
-count_tire_time.grid(row=16, column=2, sticky=N + S + E + W)
+count_tire_dist.grid(row=16, column=2, sticky=N + S + E + W)
 
 # Reading image files
 # image file used for + and - button
@@ -187,7 +188,7 @@ def increase_oilTime():
     oil was replaced.
     """
     global oil_time_days
-    oil_time_days = oil_time_days + 1
+    oil_time_days = oil_time_days + 5
     count_oil_time.configure(text=oil_time_days)
 
 
@@ -199,30 +200,30 @@ def decrease_oilTime():
     global oil_time_days
     # Condition to limit the minimum value of the variable to 0
     if oil_time_days > 0:
-        oil_time_days = oil_time_days - 1
+        oil_time_days = oil_time_days - 5
         count_oil_time.configure(text=oil_time_days)
 
 
-def increase_tireTime():
-    """Function to increase tireTime variable
-    Tire time  represents  time elapsed since
-    tire was changed.
+def increase_tireDist():
+    """Function to increase tire  Distance variable
+    Tire distance represents distance car has moved
+    since tire was changed.
     """
-    global tire_time_months
-    tire_time_months = tire_time_months + 3
-    count_tire_time.configure(text=tire_time_months)
+    global tire_dist_kms
+    tire_dist_kms = tire_dist_kms + 500
+    count_tire_dist.configure(text=tire_dist_kms)
 
 
-def decrease_tireTime():
-    """Function to decrease tireTime variable
-    Tire time  represents  time elapsed since
-    tire was changed.
+def decrease_tireDist():
+    """Function to decrease tire  Distance variable
+    Tire distance represents distance car has moved
+    since tire was changed.
     """
-    global tire_time_months
+    global tire_dist_kms
     # Condition to limit the minimum value of the variable to 0
-    if tire_time_months > 0:
-        tire_time_months = tire_time_months - 3
-        count_tire_time.configure(text=tire_time_months)
+    if tire_dist_kms > 0:
+        tire_dist_kms = tire_dist_kms - 500
+        count_tire_dist.configure(text=tire_dist_kms)
 
 
 def transmit():
@@ -247,9 +248,9 @@ btn_decOilTime = Button(window, image=img_decrease, command=decrease_oilTime, bg
                         activebackground="black")
 btn_incOilTime = Button(window, image=img_increase, command=increase_oilTime, bg="black", borderwidth=0,
                         activebackground="black")
-btn_decTireTime = Button(window, image=img_decrease, command=decrease_tireTime, bg="black", borderwidth=0,
+btn_decTireDist = Button(window, image=img_decrease, command=decrease_tireDist, bg="black", borderwidth=0,
                          activebackground="black")
-btn_incTireTime = Button(window, image=img_increase, command=increase_tireTime, bg="black", borderwidth=0,
+btn_incTireDist = Button(window, image=img_increase, command=increase_tireDist, bg="black", borderwidth=0,
                          activebackground="black")
 btn_mailID = Button(window, text="Enter", command=transmit,
                     bg="black", fg="white", height=2, width=4)
@@ -261,8 +262,8 @@ btn_incPress.grid(row=6, column=1, sticky=N + S + E + W)
 btn_decPress.grid(row=6, column=3, sticky=N + S + E + W)
 btn_decOilTime.grid(row=14, column=1, sticky=N + S + E + W)
 btn_incOilTime.grid(row=14, column=3, sticky=N + S + E + W)
-btn_decTireTime.grid(row=16, column=1, sticky=N + S + E + W)
-btn_incTireTime.grid(row=16, column=3, sticky=N + S + E + W)
+btn_decTireDist.grid(row=16, column=1, sticky=N + S + E + W)
+btn_incTireDist.grid(row=16, column=3, sticky=N + S + E + W)
 btn_mailID.grid(row=18, column=3, sticky=N + S + E + W)
 
 window.grid_columnconfigure(0, weight=1)
@@ -285,7 +286,7 @@ def timer():
         sensor1Data.append(temp)
         sensor2Data.append(press)
 
-        category1 = model_select.get()
+        category1 = weather_select.get()
         category2 = make_select.get()
 
         # store 10 reading in a list and then publish at once
@@ -293,7 +294,7 @@ def timer():
             rabbit_mq.publish(payload={"sensor1Data": sensor1Data,
                                        "sensor2Data": sensor2Data,
                                        "oilTime_hrs": oil_time_days * 24,
-                                       "tireTime_years": tire_time_months / 12,
+                                       "tire_dist_kms": tire_dist_kms,
                                        "email": email,
                                        "category1": category1,
                                        "category2": category2})
