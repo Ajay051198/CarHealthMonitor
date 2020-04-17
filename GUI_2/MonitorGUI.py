@@ -25,7 +25,7 @@ large_fsize = 15
 # Creating an object for the figure to be plot
 f = plt.figure()
 
-select_param = "TIRE"
+select_param = None
 
 chartLoad = True
 paneCount = 1
@@ -93,8 +93,6 @@ def animate(i):
                     title = "TIRE HEALTH "
                     a.set_title(title)
 
-
-
             except Exception as e:
                 print(e)
 
@@ -113,11 +111,12 @@ class HealthGraphs(tk.Tk):
         tk.Tk.wm_title(self, "Car Health Monitor")
 
         # Pulling in the current systems screen height and width info
-        width_value = (self.winfo_screenwidth() / 2.5)
-        height_value = (self.winfo_screenheight() / 2.5)
+        # width_value = (self.winfo_screenwidth() / 2.5)
+        # height_value = (self.winfo_screenheight() / 2.5)
 
         # Setting up a minimum size for the GUI
-        tk.Tk.wm_minsize(self, math.ceil(width_value), math.ceil(height_value))
+        tk.Tk.wm_minsize(self, 850, 600)
+        tk.Tk.wm_maxsize(self, 850, 600)
 
         # Adding a window frame
         container = tk.Frame(self)
@@ -126,18 +125,6 @@ class HealthGraphs(tk.Tk):
         container.grid_rowconfigure(0, weight=1)
         container.grid_columnconfigure(0, weight=1)
         container.config(bg="black")
-
-        # Adding a menu bar
-        menubar = tk.Menu(container)
-
-        paramChoice = tk.Menu(menubar, tearoff=1)
-        paramChoice.add_command(label="TIRE DATA",
-                                command=lambda: changeParam("TIRE"))
-        paramChoice.add_command(label="OIL DATA",
-                                command=lambda: changeParam("OIL"))
-        menubar.add_cascade(label="Select Data", menu=paramChoice)
-
-        tk.Tk.config(self, menu=menubar)
 
         # creating an empty dictionary for all the frames that we will create
         self.frames = {}
@@ -157,6 +144,8 @@ class HealthGraphs(tk.Tk):
         # showing up of a frame StartPage whenever this GUI opens
         self.show_frame(StartPage)
 
+
+
     def show_frame(self, cont):
         # cont is the key for the self.frames dictionary in the __init method
         frame = self.frames[cont]
@@ -165,46 +154,63 @@ class HealthGraphs(tk.Tk):
     def restart_notif(self):
         os.startfile("alertloop.py")
 
+
 # Adding a Start page
 class StartPage(tk.Frame):
 
     def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent, bg="black")
+        tk.Frame.__init__(self, parent, bg='black')
 
-        # image2 = Image.open("pranav.png")
-        # photo_image = ImageTk.PhotoImage(image2)
-        # labelbg = tk.Label(self, image = photo_image)
-        # labelbg.place(relwidth=1, relheight=1)
+        label = tk.Label(self, text="CAR HEALTH MONITOR", bg="black", fg="white",
+                         font=(fontstyle, 30))
+        label.place(x=190, y=80)
 
-        label = tk.Label(self, text=" CAR HEALTH \nMONITOR", bg="black", fg="white",
-                         font=(fontstyle, large_fsize))
-        label.pack(padx=10, pady=10)
+        label2 = tk.Label(self, text="Select the component", bg="black", fg="white",
+                          font=(fontstyle, 18))
+        label2.place(x=300, y=240)
 
-        button1 = tk.Button(self, bg="black", fg="white", height=3, width=10, text="View Graphs",
-                            command=lambda: controller.show_frame(PageOne))
-        button1.pack(padx=10, pady=10)
+        label3 = tk.Label(self, text="When maintenance is carried out, click here", bg="black", fg="white",
+                          font=(fontstyle, large_fsize))
+        label3.place(x=130, y=500)
 
-        button2 = tk.Button(self, bg="black", fg="white", height=3, width=10, text="Service complete",
+        button1 = tk.Button(self, bg="black", bd=5, fg="white", height=3, width=10, relief='ridge', text="oils",
+                            command=lambda: [controller.show_frame(PageOne), changeParam("OIL")])
+        button1.place(x=470, y=300)
+
+        button2 = tk.Button(self, bg="black", relief='ridge', fg="white", bd=5, height=3, width=10, text="tire",
+                            command=lambda: [controller.show_frame(PageOne), changeParam("TIRE")])
+        button2.place(x=300, y=300)
+
+        button3 = tk.Button(self, bg="black", fg="white", relief='ridge', height=3, width=15, bd=5,
+                            text="Service complete",
                             command=lambda: controller.restart_notif())
-        button2.pack(padx=10, pady=10)
+        button3.place(x=560, y=485)
 
 
 # Adding Page 1
 class PageOne(tk.Frame):
 
     def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent, bg="black")
+        tk.Frame.__init__(self, parent, bg='black')
         label = tk.Label(self, text="Failure Graphs", bg="black", fg="white",
-                         font=(fontstyle, large_fsize))
-        label.pack(padx=10, pady=10)
+                         font=(fontstyle, 17))
+        label.place(x=360, y=30)
 
         button1 = tk.Button(self, bg="black", fg="white", height=3, width=10, text="Home",
                             command=lambda: controller.show_frame(StartPage))
-        button1.pack(padx=10, pady=10)
+        button1.place(x=0, y=10)
+
+        button2 = tk.Button(self, bg="black", fg="white", height=3, width=10, text="tire",
+                            command=lambda: [controller.show_frame(PageOne), changeParam("TIRE")])
+        button2.place(x=260, y=90)
+
+        button3 = tk.Button(self, bg="black", fg="white", height=3, width=10, text="oil",
+                            command=lambda: [controller.show_frame(PageOne), changeParam("OIL")])
+        button3.place(x=530, y=90)
 
         canvas1 = FigureCanvasTkAgg(f, self)
         canvas1.draw()
-        canvas1.get_tk_widget().pack(padx=10, pady=10)
+        canvas1.get_tk_widget().place(x=110, y=150)
 
 
 app = HealthGraphs()
