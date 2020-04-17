@@ -22,7 +22,7 @@ press = 0
 oil_time_days = 0
 tire_time_months = 0
 mailID = StringVar()
-email = "ABC@email.com"
+email = "rain.cloud.bot@gmail.com"
 
 # setting up the font size and style
 fontstyle = "Helvetica"
@@ -142,7 +142,7 @@ model_select.grid(row=10, column=2, sticky=N + S + E + W)
 count_oil_time.grid(row=14, column=2, sticky=N + S + E + W)
 count_tire_time.grid(row=16, column=2, sticky=N + S + E + W)
 
-# Reading image files 
+# Reading image files
 # image file used for + and - button
 img_increase = PhotoImage(file='increase.png')
 img_decrease = PhotoImage(file='decrease.png')
@@ -226,7 +226,7 @@ def decrease_tireTime():
 
 
 def transmit():
-    """Function  to set  the  value of email to 
+    """Function  to set  the  value of email to
     the one entered by the user in the text box
     """
     global mailID

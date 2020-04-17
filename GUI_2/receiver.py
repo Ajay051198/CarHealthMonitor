@@ -46,7 +46,7 @@ class RabbitMqServer(object):
     @staticmethod
     def callback(ch, method, properties, body):
         """
-            Whenever we receive a message, this callback function is called by the Pika library. 
+            Whenever we receive a message, this callback function is called by the Pika library.
             In our case this function will print on the screen the contents of the message.
         """
 
@@ -68,18 +68,15 @@ class RabbitMqServer(object):
             m = f"{data['oilTime_hrs']},{data['tireTime_years']}"
             f.write(m)
 
-        with open('UserEmail.CSV', 'w', newline='') as f:
-            m = f"{data['email']}"
-            f.write(m)
-
         with open('parameters.txt', 'w', newline='') as f:
             params = {"category1": data['category1'],
-                      "category2": data['category2']}
+                      "category2": data['category2'],
+                      "email": data['email']}
             f.write(str(params))
 
     def start_server(self):
         """
-            For that command to succeed we must be sure that a queue which we want to subscribe to exists. 
+            For that command to succeed we must be sure that a queue which we want to subscribe to exists.
             Fortunately we're confident about that ‒ we've created a queue above ‒ using queue_declare.
         """
         self._channel.basic_consume(queue=self.server.queue,

@@ -1,23 +1,7 @@
 import pandas as pd
 import smtplib
-import json
 
 debug = False
-
-with open('parameters.txt', 'r') as f:
-    data = f.read()
-
-data = data.replace('\'', '\"')
-json_dict = json.loads(data)
-
-category1 = json_dict['category1']
-category2 = json_dict['category2']
-
-print(category1, category2)
-
-"""
-insert code here to choose thresholds based on category values
-"""
 
 
 def send_email(from_addr, to_addr_list, cc_addr_list,
@@ -38,9 +22,9 @@ def send_email(from_addr, to_addr_list, cc_addr_list,
     return problems
 
 
-def checkcond(f, thres1 = 10, thres2 = 10, thres3 = 10):
+def checkcond(f, thres1, thres2, email):
     data = pd.read_csv('SensorData.csv')
-    data.columns = ['DataStream1', 'DataStream2', 'DataStream3']
+    data.columns = ['DataStream1', 'DataStream2']
     data = data.tail(10)
 
     # using flag based calling to ensure the alert is given only once unless it is reset
@@ -48,7 +32,7 @@ def checkcond(f, thres1 = 10, thres2 = 10, thres3 = 10):
     message = ""
 
     # temperory print line meant for debuging
-    print(data['DataStream1'].mean(), data['DataStream2'].mean(), data['DataStream3'].mean())
+    print(data['DataStream1'].mean(), data['DataStream2'].mean())
 
     # checking the mean of the last 10 values to avoid triggers by noise
     if data['DataStream1'].mean() > thres1:
@@ -59,22 +43,18 @@ def checkcond(f, thres1 = 10, thres2 = 10, thres3 = 10):
         message = message + "component 2 requires maintainance \n"
         flag = True
 
-    if data['DataStream3'].mean() > thres3:
-        message = message + "component 3 requires maintainance \n"
-        flag = True
-
     if flag:
 
         print(message)
         # the below section will be in the final code
-        '''
-        send_email(from_addr='s1lv3r.b0t@gmail.com',
-                   to_addr_list=['ajay.selvamk@gmail.com'],
-                   subject='Howdy',
-                   message='Howdy from a python function',
-                   login='s1lv3r.b0t@gmail.com',
-                   password='1111111111111111') # will not work as i cant put my password here
-        '''
+        send_email(from_addr='rain.cloud.bot@gmail.com',
+                   to_addr_list=[email],
+                   cc_addr_list=[],
+                   subject='maintainance update',
+                   message=message,
+                   login='rain.cloud.bot@gmail.com',
+                   password='jxixsnxxuukmszul')
+        print('EMAIL SENT')
     return flag
 
 
@@ -86,7 +66,7 @@ if debug:
     # inside loop
     for i in range(10):
         if not f:
-            f = checkcond(f, 15,15,15)
+            f = checkcond(f, 60,15)
 
     input("Press Enter to exit .")
     exit()
