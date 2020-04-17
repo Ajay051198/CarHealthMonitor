@@ -152,7 +152,7 @@ class StartPage(tk.Frame):
         tk.Frame.__init__(self, parent, bg='black')
 
         label = tk.Label(self, text="CAR HEALTH MONITOR",
-                         bg="black", fg="white",
+                         bg="black", fg="cyan2",
                          font=(fontstyle, 30))
         label.place(x=190, y=80)
 

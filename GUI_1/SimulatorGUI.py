@@ -50,7 +50,7 @@ sensor2Data = []
 
 # Main titles
 lbl_Title = Label(window, text="\n Sensor Data \n", bg="black",
-                  fg="white", font=(large_fsize, large_fsize))
+                  fg="cyan3", font=(large_fsize, large_fsize))
 
 lbl_Temp = Label(window, text="Engine Temperature (°C)", font=(
     fontstyle, small_fsize), bg="black", fg="white")
@@ -68,7 +68,7 @@ lbl_cat2 = Label(window, text="Driving Weather Condition",
 lbl_blank4 = Label(window, text="  ", bg="black")
 
 lbl_heading = Label(window, text="\nTime elapsed after last replacement\n ",
-                    bg="black", fg="white",
+                    bg="black", fg="cyan3",
                     font=(fontstyle, large_fsize))
 lbl_blank5 = Label(window, text="   ", bg="black")
 
@@ -257,7 +257,7 @@ btn_incTireDist = Button(window, image=img_increase, command=increase_tireDist,
                          bg="black", borderwidth=0,
                          activebackground="black")
 btn_mailID = Button(window, text="Enter", command=transmit,
-                    bg="black", fg="white", height=2, width=4)
+                    bg="black", fg="cyan3", height=2, width=4)
 
 # Placing buttons using grid function
 btn_decTemp.grid(row=4, column=1, sticky=N + S + E + W)
