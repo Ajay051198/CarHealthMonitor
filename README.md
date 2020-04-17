@@ -1,6 +1,22 @@
 # MECH 550C Prject: Car Health Monitor System
 - Authors: Ajay, Chinmay, Pranav, Sameer
 
+## Description
+
+-	Car Health Monitor is an application which is used to monitor different parameters
+    of the car and notify the user about the part that has high probability of failure 
+    in coming future.
+-	Car Health Monitor is used to monitor the parameters Engine Oil and Tire Health with 
+    the help of the sensor data. 
+-	The sensor data is sent to a CSV file through Advanced Message queuing Protocol.
+-	The data is read from the CSV file and is used for plotting failure curves for both
+    parameters. 
+-	On plotting the graph if the probability of failure I above certain value the user gets
+    notified by an email
+-	The email will notify what parameter of the car needs to be changed and must be serviced.
+	This will help the customer to predict the failure of the part and assist the user to 
+    avoid break down of the car due to sudden failure.
+
 
 ## File Structure
 
