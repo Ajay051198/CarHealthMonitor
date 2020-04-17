@@ -30,7 +30,7 @@ combostyle.theme_create('combostyle', parent='alt',
                         settings={'TCombobox':
                                   {'configure':
                                    {'selectbackground': 'black',
-                                    'foreground':'white',
+                                    'foreground': 'white',
                                     'fieldbackground': 'black',
                                     'background': 'dark grey',
                                     'arrowcolor': 'black',
@@ -67,7 +67,8 @@ lbl_cat2 = Label(window, text="Driving Weather Condition",
                  font=(fontstyle, small_fsize), bg="black", fg="white")
 lbl_blank4 = Label(window, text="  ", bg="black")
 
-lbl_heading = Label(window, text="\nTime elapsed after last replacement\n ", bg="black", fg="white",
+lbl_heading = Label(window, text="\nTime elapsed after last replacement\n ",
+                    bg="black", fg="white",
                     font=(fontstyle, large_fsize))
 lbl_blank5 = Label(window, text="   ", bg="black")
 
@@ -84,7 +85,8 @@ email_input = Entry(window, textvariable=mailID, bg="dark grey",
                     font=(fontstyle, large_fsize), fg="black")
 lbl_blank8 = Label(window, text="        \n   ", bg="black")
 
-lbl_email = Label(window, text="Please enter email id to receive notifications", font=(fontstyle, small_fsize),
+lbl_email = Label(window, text="Please enter email id to receive notifications",
+                  font=(fontstyle, small_fsize),
                   bg="black", fg="white")
 
 # Number labels
@@ -144,12 +146,14 @@ count_tire_dist.grid(row=16, column=2, sticky=N + S + E + W)
 img_increase = PhotoImage(file='increase.png')
 img_decrease = PhotoImage(file='decrease.png')
 
+
 def increase_temp():
     """Function to increase temperature variable
     """
     global temp
     temp = temp + 10
     count_Temp.configure(text=temp)
+
 
 def decrease_temp():
     """Function to decrease temperature variable
@@ -240,13 +244,17 @@ btn_incPress = Button(window, image=img_decrease, command=decrease_press,
                       bg="black", borderwidth=0, activebackground="black")
 btn_decPress = Button(window, image=img_increase, command=increase_press,
                       bg="black", borderwidth=0, activebackground="black")
-btn_decOilTime = Button(window, image=img_decrease, command=decrease_oilTime, bg="black", borderwidth=0,
+btn_decOilTime = Button(window, image=img_decrease, command=decrease_oilTime,
+                        bg="black", borderwidth=0,
                         activebackground="black")
-btn_incOilTime = Button(window, image=img_increase, command=increase_oilTime, bg="black", borderwidth=0,
+btn_incOilTime = Button(window, image=img_increase, command=increase_oilTime,
+                        bg="black", borderwidth=0,
                         activebackground="black")
-btn_decTireDist = Button(window, image=img_decrease, command=decrease_tireDist, bg="black", borderwidth=0,
+btn_decTireDist = Button(window, image=img_decrease, command=decrease_tireDist,
+                         bg="black", borderwidth=0,
                          activebackground="black")
-btn_incTireDist = Button(window, image=img_increase, command=increase_tireDist, bg="black", borderwidth=0,
+btn_incTireDist = Button(window, image=img_increase, command=increase_tireDist,
+                         bg="black", borderwidth=0,
                          activebackground="black")
 btn_mailID = Button(window, text="Enter", command=transmit,
                     bg="black", fg="white", height=2, width=4)
@@ -275,32 +283,33 @@ def timer():
     # global x
 
     # if x < 1100:
-        # call this function again in 1,000 milliseconds
-        window.after(1000, timer)
-        print("Updating ...")
+    # call this function again in 1,000 milliseconds
+    window.after(1000, timer)
+    print("Updating ...")
 
-        sensor1Data.append(temp)
-        sensor2Data.append(press)
+    sensor1Data.append(temp)
+    sensor2Data.append(press)
 
-        category1 = weather_select.get()
-        category2 = make_select.get()
+    category1 = weather_select.get()
+    category2 = make_select.get()
 
-        # store 10 reading in a list and then publish at once
-        if len(sensor1Data) == 10:
-            rabbit_mq.publish(payload={"sensor1Data": sensor1Data,
-                                       "sensor2Data": sensor2Data,
-                                       "oilTime_hrs": oil_time_days * 24,
-                                       "tire_dist_kms": tire_dist_kms,
-                                       "email": email,
-                                       "category1": category1,
-                                       "category2": category2})
-            sensor2Data.clear()
-            sensor1Data.clear()
+    # store 10 reading in a list and then publish at once
+    if len(sensor1Data) == 10:
+        rabbit_mq.publish(payload={"sensor1Data": sensor1Data,
+                                   "sensor2Data": sensor2Data,
+                                   "oilTime_hrs": oil_time_days * 24,
+                                   "tire_dist_kms": tire_dist_kms,
+                                   "email": email,
+                                   "category1": category1,
+                                   "category2": category2})
+        sensor2Data.clear()
+        sensor1Data.clear()
 
-            # Set X=0 to run timer function in an infinite loop
-        #     if x > 1000:
-        #         x = 0
-        # x += 1
+        # Set X=0 to run timer function in an infinite loop
+    #     if x > 1000:
+    #         x = 0
+    # x += 1
+
 
 timer()
 window.mainloop()
