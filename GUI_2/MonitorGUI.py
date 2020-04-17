@@ -78,13 +78,13 @@ def animate(i):
                     engineOilReliability = plotting_function.dataManipulation()
                     # sample txt would be replaced with a file
                     engineOilReliability.computeX(time)
-                    engineOilReliability.computeY("1-np.exp(-(i/2.23)**1.05)")
+                    engineOilReliability.computeY("1-np.exp(-(i/41667)**1.37)")
                     # engineOilReliability.graph('Hours', 'Failure',
                     #                         'Running hours vs Failure')
 
                     # print(engineOilReliability.x_values)
                     a.clear()
-                    a.set_xlabel("time (years)")
+                    a.set_xlabel("distance (kms)")
                     a.set_ylabel("Failure Probability")
                     a.plot(engineOilReliability.x_values,
                            engineOilReliability.y_values, label="legend")
