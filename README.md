@@ -43,14 +43,16 @@ CarHealthMonitor
 
 
 ## Execution
+Run CarHealthMonitor.exe to run the application
 
-"""
+Commands used to convert .py files to .exe:
+```
 pip install auto-py-to-exe
 auto-py-to-exe
 
 pip install pyinstaller
 pyinstaller filename.py --onefile
-"""
+```
 
 ## Dependencies
 - AMQP
