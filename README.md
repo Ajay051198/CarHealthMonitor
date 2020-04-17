@@ -44,6 +44,13 @@ CarHealthMonitor
 
 ## Execution
 
+"""
+pip install auto-py-to-exe
+auto-py-to-exe
+
+pip install pyinstaller
+pyinstaller filename.py --onefile
+"""
 
 ## Dependencies
 - AMQP

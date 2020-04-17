@@ -59,7 +59,7 @@ class RabbitMqServer(object):
         """
 
         message = body.decode("utf-8")
-        print(f"Received {message}")
+        print(f"Received ")
         # message = json.loads(str(message))
         message = message.replace('\'', '\"')
         data = json.loads(message)
@@ -72,7 +72,7 @@ class RabbitMqServer(object):
                     data['sensor1Data'][i], data['sensor2Data'][i])
                 f.write(m)
 
-        print(f"time: {data['oilTime_hrs']}")
+        # print(f"time: {data['oilTime_hrs']}")
         with open('TimeElapsed.CSV', 'w', newline='') as f:
             m = f"{data['oilTime_hrs']},{data['tire_dist_kms']}"
             f.write(m)
@@ -99,6 +99,7 @@ class RabbitMqServer(object):
 
 
 if __name__ == "__main__":
+    print("Receiver open")
     server_config = RabbitMqConfig(host='localhost',
                                    queue='Hello')
     server = RabbitMqServer(server_config)

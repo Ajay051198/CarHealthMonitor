@@ -40,22 +40,22 @@ def select_thresh():
 
         if category2 == "Summer":
             # Temperature in celsius
-            thresh_engineTemp = 106
+            thresh_engineTemp = 107
             # Pressure in psi
-            thresh_tirePressure = 30
+            thresh_tirePressure = 28
         elif category2 == "Winter":
-            thresh_engineTemp = 100
-            thresh_tirePressure = 33
+            thresh_engineTemp = 102
+            thresh_tirePressure = 31
 
     elif category2 == "Truck":
 
         if category2 == "Summer":
             thresh_engineTemp = 115
-            thresh_tirePressure = 34
+            thresh_tirePressure = 31
 
         elif category2 == "Winter":
             thresh_engineTemp = 110
-            thresh_tirePressure = 37
+            thresh_tirePressure = 34
 
     thresh_tireDistanceKm = 60000
     thresh_oilTimehrs = 5000
