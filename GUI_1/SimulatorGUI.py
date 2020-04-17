@@ -1,7 +1,3 @@
-import inspect
-import math
-import os
-import sys
 from tkinter import *
 from tkinter import ttk
 
@@ -210,7 +206,7 @@ def increase_tireDist():
     since tire was changed.
     """
     global tire_dist_kms
-    tire_dist_kms = tire_dist_kms + 500
+    tire_dist_kms = tire_dist_kms + 5000
     count_tire_dist.configure(text=tire_dist_kms)
 
 
@@ -222,7 +218,7 @@ def decrease_tireDist():
     global tire_dist_kms
     # Condition to limit the minimum value of the variable to 0
     if tire_dist_kms > 0:
-        tire_dist_kms = tire_dist_kms - 500
+        tire_dist_kms = tire_dist_kms - 5000
         count_tire_dist.configure(text=tire_dist_kms)
 
 

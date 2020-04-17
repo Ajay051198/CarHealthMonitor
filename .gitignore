@@ -5,6 +5,7 @@ UserEmail.CSV
 parameters.txt
 .idea
 .vs
+.vscode
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
