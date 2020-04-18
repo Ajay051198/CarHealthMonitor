@@ -9,6 +9,7 @@ import matplotlib
 
 matplotlib.use("TkAgg")
 
+# Defining some style and fonts 
 style.use("dark_background")
 fontstyle = "Helvetica"
 small_fsize = 13
@@ -25,16 +26,22 @@ paneCount = 1
 
 # Creating a method for menu parameters
 def changeParam(toWhat):
+    """Function to set the parameter whose graph needs to be displayed
+
+    Arguments:
+        toWhat {string} -- Parameter to be set
+    """
     global select_param
     select_param = toWhat
 
 
 # Creating an animate function for the matplotlib graphs
-
-# User list comprehension to create a list of lists from Dataframe rows
-
-
 def animate(i):
+    """Function used to display live graphs
+    
+    Arguments:
+        i {int} -- time interval
+    """
     if chartLoad:
         if paneCount == 1:
             csvData = []
@@ -50,10 +57,7 @@ def animate(i):
                     # sample txt would be replaced with a file
                     engineOilReliability.computeX(time)
                     engineOilReliability.computeY("1-np.exp(-(i/5190)**1.55)")
-                    # engineOilReliability.graph('Hours', 'Failure',
-                    #                         'Running hours vs Failure')
 
-                    # print(engineOilReliability.x_values)
                     a.clear()
                     a.set_xlabel("time (hours)")
                     a.set_ylabel("Failure Probability")
@@ -71,10 +75,7 @@ def animate(i):
                     # sample txt would be replaced with a file
                     engineOilReliability.computeX(time)
                     engineOilReliability.computeY("1-np.exp(-(i/41667)**1.37)")
-                    # engineOilReliability.graph('Hours', 'Failure',
-                    #                         'Running hours vs Failure')
 
-                    # print(engineOilReliability.x_values)
                     a.clear()
                     a.set_xlabel("distance (kms)")
                     a.set_ylabel("Failure Probability")
@@ -92,8 +93,13 @@ def animate(i):
 # BASE-LINE code for adding pages
 
 class HealthGraphs(tk.Tk):
+    """Class to define frame of the GUI
+    
+    """
 
     def __init__(self, *args, **kwargs):
+        """Initialize the frame as an object of class HealthGraphs
+        """
         tk.Tk.__init__(self, *args, **kwargs)
 
         # Adding an icon for the GUI
@@ -102,10 +108,6 @@ class HealthGraphs(tk.Tk):
         # Adding the GUI title
         tk.Tk.wm_title(self, "Car Health Monitor")
 
-        # Pulling in the current systems screen height and width info
-        # width_value = (self.winfo_screenwidth() / 2.5)
-        # height_value = (self.winfo_screenheight() / 2.5)
-
         # Setting up a minimum size for the GUI
         tk.Tk.wm_minsize(self, 850, 600)
         tk.Tk.wm_maxsize(self, 850, 600)
@@ -113,6 +115,7 @@ class HealthGraphs(tk.Tk):
         # Adding a window frame
         container = tk.Frame(self)
         container.pack(side="top", fill="both", expand=True)
+
         # 0 is the min size, weight is the priority
         container.grid_rowconfigure(0, weight=1)
         container.grid_columnconfigure(0, weight=1)
@@ -129,26 +132,41 @@ class HealthGraphs(tk.Tk):
             self.frames[F] = frame
 
             # assigning the location
-            # nswe = north,south,east,west. Can be expanded in all
+            # nswe = north,south,east,west. Can be expanded in all directions
             frame.grid(row=0, column=0, sticky="nsew")
-            # directions
 
         # showing up of a frame StartPage whenever this GUI opens
         self.show_frame(StartPage)
 
     def show_frame(self, cont):
+        """Function to bring the frame to the top 
+        
+        Arguments:
+            cont  -- represents the page container
+        """
         # cont is the key for the self.frames dictionary in the __init method
         frame = self.frames[cont]
         frame.tkraise()  # brings up thw window to the top
 
     def restart_notif(self):
+        """Function to call notification executable
+        """
         os.startfile("alertloop.exe")
 
 
 # Adding a Start page
 class StartPage(tk.Frame):
+    """Inititalize the start page of the GUI
+    """
 
     def __init__(self, parent, controller):
+        """Initialize object of class StartPage
+        
+        Arguments:
+            parent  -- object of tk.frame
+            controller  -- object of class HealthGraphs
+
+        """
         tk.Frame.__init__(self, parent, bg='black')
 
         label = tk.Label(self, text="CAR HEALTH MONITOR",
@@ -188,8 +206,17 @@ class StartPage(tk.Frame):
 
 # Adding Page 1
 class PageOne(tk.Frame):
+    """ Inititalize the page one of the GUI
+    """
 
     def __init__(self, parent, controller):
+        """Initialize object of class PageOne
+        
+        Arguments:
+            parent  -- object of tk.frame
+            controller  -- object of class HealthGraphs
+
+        """
         tk.Frame.__init__(self, parent, bg='black')
         label = tk.Label(self, text="Failure Graphs", bg="black", fg="white",
                          font=(fontstyle, 17))
@@ -223,15 +250,24 @@ class PageOne(tk.Frame):
 
 
 class PageTwo(tk.Frame):
+    """Inititalize the page two of the GUI
+    """
 
     def __init__(self, parent, controller):
+        """Initialize object of class PageTwo
+        
+        Arguments:
+            parent  -- object of tk.frame
+            controller  -- object of class HealthGraphs
+
+        """
         tk.Frame.__init__(self, parent, bg='black')
         label = tk.Label(self, text="Project by:", bg="black",
                          fg="cyan2", font=(fontstyle, 14))
         label.place(x=355, y=220)
 
         labe2 = tk.Label(self, text="Ajaykumar Mudaliar\nSameer Todkar\nChinmay Mulay\n\
-Pranav Jain", bg="black", fg="white", font=(fontstyle, 13))
+                        Pranav Jain", bg="black", fg="white", font=(fontstyle, 13))
         labe2.place(x=325, y=260)
 
         button1 = tk.Button(self, bg="black", fg="cyan2", height=3, width=10,
@@ -239,7 +275,9 @@ Pranav Jain", bg="black", fg="white", font=(fontstyle, 13))
                             command=lambda: controller.show_frame(StartPage))
         button1.place(x=0, y=10)
 
-
+# Creating an object of the class HealthGraphs()
 app = HealthGraphs()
+
+# plotting the graph using Funcanimation and the animate function
 graph = animation.FuncAnimation(f, animate, interval=1000)
 app.mainloop()

@@ -105,7 +105,7 @@ def checkcond(f, thres1, thres2, thres3, thres4, email):
         message = message + "Engine oil need to be replaced, please carry out maintainance \n"
         flag = True
 
-    if data2['DataStream4'].mean() > thres3:
+    if data2['DataStream4'].mean() > thres4:
         message = message + "Tire have worn out, please carry out maintainance \n"
         flag = True
 
