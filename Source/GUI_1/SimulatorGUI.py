@@ -14,7 +14,7 @@ window.maxsize(800, 600)
 window.configure(bg='black')
 
 temp = 40
-press = 31
+press = 35
 oil_time_days = 0
 tire_dist_kms = 0
 mailID = StringVar()
